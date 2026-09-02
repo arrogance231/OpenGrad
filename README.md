@@ -32,7 +32,7 @@ The first planned study concerns reliable tool use in small models:
 
 ### Inference and systems efficiency
 
-A separate track will study quantization, GGUF, llama.cpp, ExecuTorch, CPU and ARM inference, mobile deployment, and eventually speculative decoding. Capability and efficiency are evaluated separately before they are considered jointly.
+OpenGrad's primary systems focus is research on faster generation: speculative decoding, native multi-token prediction (MTP) heads, external draft/target pairs, and architecture-aware decoding methods. OpenWeights is the downstream execution environment for compatible checkpoints, including GGUF/llama.cpp and ExecuTorch `.pte` deployment on practical devices. OpenGrad supplies the experimental methods, model-side changes, provenance, and evaluation definitions; OpenWeights handles device-side execution and measurements. Capability and efficiency are evaluated separately before they are considered jointly.
 
 OpenGrad is model-agnostic. Model-family adapters are designed for Qwen, LFM, Gemma, Llama, Phi, SmolLM, and future small open-weight models without imposing one universal tool protocol.
 
@@ -72,12 +72,12 @@ See [the roadmap](ROADMAP.md), [the Phase 0.5 report](PRE_EXPERIMENT_REPORT.md),
 ## Related projects
 
 - [OpenPapers](https://github.com/arrogance231/openpapers) — optional literature discovery and scholarly provenance infrastructure.
-- [OpenWeights](https://github.com/alpharomercoma/openweights) — separate downstream environment for future practical device-side evaluation.
+- [OpenWeights](https://github.com/alpharomercoma/openweights) — separate downstream execution environment with llama.cpp and ExecuTorch support for future practical device-side evaluation.
 - [Small-Mind Companion](https://github.com/arrogance231/small-mind-companion) and [SchemaForge](https://github.com/arrogance231/SchemaForge) — related maintainer projects, not OpenGrad results.
 
 ## Contributing
 
-Useful contributions include reproductions, alternative seeds, new model-family adapters, dataset audits, benchmark discrepancy reports, hardware and mobile measurements, quantization studies, inference implementations, and negative results.
+Useful contributions include reproductions, alternative seeds, new model-family adapters, dataset audits, benchmark discrepancy reports, speculative-decoding and MTP experiments, hardware and mobile measurements, inference implementations, and negative results.
 
 Start with [CONTRIBUTING.md](CONTRIBUTING.md) and the templates under `docs/contributing/`. Contributions should include exact revisions, configuration, provenance, observed regressions, and limitations.
 

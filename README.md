@@ -1,10 +1,23 @@
+<div align="center">
+
+<img src="assets/opengrad-icon.png" alt="OpenGrad icon" width="180" />
+
 # OpenGrad
+
+**Empirical research on capability–efficiency tradeoffs in small open-weight language models.**
+
+[![License](https://img.shields.io/badge/license-Apache--2.0-052B42?style=flat-square)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11%2B-052B42?style=flat-square)](pyproject.toml)
+[![CI](https://github.com/arrogance231/OpenGrad/actions/workflows/ci.yml/badge.svg)](https://github.com/arrogance231/OpenGrad/actions/workflows/ci.yml)
+[![Status](https://img.shields.io/badge/status-Phase%200.5-052B42?style=flat-square)](PRE_EXPERIMENT_REPORT.md)
+
+</div>
 
 OpenGrad is an open research repository for measuring capability–efficiency tradeoffs in post-trained small open-weight language models.
 
 The project treats model changes as experiments, not as presumed improvements. Each result should preserve the model and dataset revisions, benchmark versions, hardware and software environment, regressions, failure analysis, and reproduction evidence.
 
-**Current status: Phase 0.5 — CPU-only pre-experiment validation. No OpenGrad training, model inference, benchmark evaluation, or published research results exist yet.**
+> **Current status:** Phase 0.5 — CPU-only pre-experiment validation. No OpenGrad training, model inference, benchmark evaluation, or published research results exist yet.
 
 ## Research tracks
 

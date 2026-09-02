@@ -1,3 +1,26 @@
-schema_version: 1
-models: []
-# Add model-family records only after exact revision, license, native protocol, and runtime support are verified.
+schema_version: 2
+models:
+- id: qwen3.5-2b
+  family: Qwen
+  hf_repo: null
+  revision: null
+  parameters: ~2B (planned identifier; verify before Phase 1)
+  architecture: null
+  context_length: null
+  tokenizer: null
+  chat_template: null
+  tool_protocol: native Qwen protocol; runtime validation required
+  native_tool_parser: null
+  multimodal: null
+  license: null
+  preferred_precision: null
+  known_runtimes:
+  - transformers
+  - llama-cpp
+  gguf_support: null
+  executorch_support: null
+  mobile_candidate: true
+  teacher_candidate: false
+  student_candidate: true
+  notes: PLANNED_ONLY. Exact Hugging Face repository and revision must be resolved
+    before Phase 1; no model is downloaded in Phase 0.5.

@@ -2,7 +2,7 @@
 
 OpenGrad is research infrastructure for empirical evaluation of capability–efficiency tradeoffs in post-trained small open-weight language models. It is designed as an open record of what changes models, why, what it costs, what it breaks, and whether findings reproduce—not as a collection of successful fine-tunes.
 
-**Status: Phase 0 — repository and research infrastructure. No OpenGrad training results exist yet. No model has been trained, no checkpoint has been modified, and speculative decoding has not been implemented.**
+**Status: Phase 0.5 — CPU-only pre-experiment validation. No OpenGrad training results exist yet. No model has been trained, no checkpoint has been modified, no model inference has been run, and speculative decoding has not been implemented.**
 
 ## Research tracks
 

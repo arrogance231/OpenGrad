@@ -1,101 +1,129 @@
 schema_version: 1
 status: BOOTSTRAP_NO_SCORES
 benchmarks:
-  - id: bfcl-v4
-    name: Berkeley Function Calling Leaderboard V4
-    canonical_repository: https://github.com/ShishirPatil/gorilla
-    reference: null
-    version: V4
-    commit_sha: null
-    evaluator_version: null
-    splits: []
-    metrics: [function_call_accuracy]
-    contamination_sensitivity: HIGH
-    parser_requirements: model-native-or-bfcl-adapter
-    generation_settings: null
-    trials: null
-    notes: Pin evaluator and task release before comparison.
-  - id: when2call-eval
-    name: When2Call evaluation
-    canonical_repository: null
-    reference: arxiv:2504.18851
-    version: null
-    commit_sha: null
-    evaluator_version: null
-    splits: [mcq_test, llm_judge_test]
-    metrics: [call_decision, answer_quality]
-    contamination_sensitivity: HIGH
-    parser_requirements: dataset-specific
-    generation_settings: null
-    trials: null
-    notes: Keep preference and test data out of training.
-  - id: tau-bench-tau2
-    name: tau-bench / tau2
-    canonical_repository: https://github.com/sierra-research/tau-bench
-    reference: null
-    version: null
-    commit_sha: null
-    evaluator_version: null
-    splits: []
-    metrics: [task_success, reward]
-    contamination_sensitivity: HIGH
-    parser_requirements: tool-environment-specific
-    generation_settings: null
-    trials: null
-    notes: APIGen-MT contamination must be reported separately.
-  - id: toolsandbox
-    name: ToolSandbox
-    canonical_repository: null
-    reference: null
-    version: null
-    commit_sha: null
-    evaluator_version: null
-    splits: []
-    metrics: [tool_use_correctness]
-    contamination_sensitivity: HIGH
-    parser_requirements: benchmark-specific
-    generation_settings: null
-    trials: null
-    notes: Pending authoritative metadata.
-  - id: mcpmark-verified
-    name: MCPMark Verified
-    canonical_repository: null
-    reference: null
-    version: Verified
-    commit_sha: null
-    evaluator_version: null
-    splits: []
-    metrics: [task_success]
-    contamination_sensitivity: HIGH
-    parser_requirements: mcp-client
-    generation_settings: null
-    trials: null
-    notes: Stretch evaluation; metadata pending verification.
-  - id: toolathlon
-    name: Toolathlon / Tool Decathlon
-    canonical_repository: null
-    reference: null
-    version: null
-    commit_sha: null
-    evaluator_version: null
-    splits: []
-    metrics: [task_success]
-    contamination_sensitivity: HIGH
-    parser_requirements: benchmark-specific
-    generation_settings: null
-    trials: null
-    notes: Stretch evaluation; metadata pending verification.
-  - id: internal-no-tool-regression
-    name: OpenGrad internal no-tool regression suite
-    canonical_repository: null
-    reference: null
-    version: spec-v0
-    commit_sha: null
-    evaluator_version: null
-    splits: [development, secret_holdout_future]
-    metrics: [instruction_following, structured_output]
-    contamination_sensitivity: INTERNAL_HOLDOUT
-    parser_requirements: none
-    generation_settings: null
-    trials: null
-    notes: Public fixtures only in bootstrap; secret holdout is not generated here.
+- id: bfcl-v4
+  name: Berkeley Function Calling Leaderboard V4
+  canonical_repository: https://github.com/ShishirPatil/gorilla
+  reference: null
+  version: V4
+  commit_sha: null
+  evaluator_version: null
+  splits: []
+  metrics:
+  - function_call_accuracy
+  contamination_sensitivity: HIGH
+  parser_requirements: model-native-or-bfcl-adapter
+  generation_settings: null
+  trials: null
+  notes: Pin evaluator and task release before comparison.
+  recommended_repository_revision: 6ea57973c7a6097fd7c5915698c54c17c5b1b6c8
+  revision_source: https://github.com/ShishirPatil/gorilla/commit/6ea57973c7a6097fd7c5915698c54c17c5b1b6c8
+- id: when2call-eval
+  name: When2Call evaluation
+  canonical_repository: null
+  reference: arxiv:2504.18851
+  version: null
+  commit_sha: null
+  evaluator_version: null
+  splits:
+  - mcq_test
+  - llm_judge_test
+  metrics:
+  - call_decision
+  - answer_quality
+  contamination_sensitivity: HIGH
+  parser_requirements: dataset-specific
+  generation_settings: null
+  trials: null
+  notes: Keep preference and test data out of training.
+  recommended_repository_revision: null
+  revision_source: UNRESOLVED_AFTER_DIRECT_CHECK
+- id: tau-bench-tau2
+  name: tau-bench / tau2
+  canonical_repository: https://github.com/sierra-research/tau-bench
+  reference: null
+  version: null
+  commit_sha: null
+  evaluator_version: null
+  splits: []
+  metrics:
+  - task_success
+  - reward
+  contamination_sensitivity: HIGH
+  parser_requirements: tool-environment-specific
+  generation_settings: null
+  trials: null
+  notes: APIGen-MT contamination must be reported separately.
+  recommended_repository_revision: 59a200c6d575d595120f1cb70fea53cef0632f6b
+  revision_source: https://github.com/sierra-research/tau-bench/commit/59a200c6d575d595120f1cb70fea53cef0632f6b
+- id: toolsandbox
+  name: ToolSandbox
+  canonical_repository: null
+  reference: null
+  version: null
+  commit_sha: null
+  evaluator_version: null
+  splits: []
+  metrics:
+  - tool_use_correctness
+  contamination_sensitivity: HIGH
+  parser_requirements: benchmark-specific
+  generation_settings: null
+  trials: null
+  notes: Pending authoritative metadata.
+  recommended_repository_revision: null
+  revision_source: UNRESOLVED_AFTER_DIRECT_CHECK
+- id: mcpmark-verified
+  name: MCPMark Verified
+  canonical_repository: null
+  reference: null
+  version: Verified
+  commit_sha: null
+  evaluator_version: null
+  splits: []
+  metrics:
+  - task_success
+  contamination_sensitivity: HIGH
+  parser_requirements: mcp-client
+  generation_settings: null
+  trials: null
+  notes: Stretch evaluation; metadata pending verification.
+  recommended_repository_revision: null
+  revision_source: UNRESOLVED_AFTER_DIRECT_CHECK
+- id: toolathlon
+  name: Toolathlon / Tool Decathlon
+  canonical_repository: null
+  reference: null
+  version: null
+  commit_sha: null
+  evaluator_version: null
+  splits: []
+  metrics:
+  - task_success
+  contamination_sensitivity: HIGH
+  parser_requirements: benchmark-specific
+  generation_settings: null
+  trials: null
+  notes: Stretch evaluation; metadata pending verification.
+  recommended_repository_revision: null
+  revision_source: UNRESOLVED_AFTER_DIRECT_CHECK
+- id: internal-no-tool-regression
+  name: OpenGrad internal no-tool regression suite
+  canonical_repository: null
+  reference: null
+  version: spec-v0
+  commit_sha: null
+  evaluator_version: null
+  splits:
+  - development
+  - secret_holdout_future
+  metrics:
+  - instruction_following
+  - structured_output
+  contamination_sensitivity: INTERNAL_HOLDOUT
+  parser_requirements: none
+  generation_settings: null
+  trials: null
+  notes: Public fixtures only in bootstrap; secret holdout is not generated here.
+  recommended_repository_revision: null
+  revision_source: UNRESOLVED_AFTER_DIRECT_CHECK

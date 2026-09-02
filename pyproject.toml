@@ -17,6 +17,8 @@ inference = ["llama-cpp-python"]
 dev = ["pytest>=8.0", "ruff>=0.6", "mypy>=1.11", "pyyaml>=6.0", "jsonschema>=4.23"]
 
 [project.scripts]
+opengrad = "opengrad.cli:main"
+opengrad-preflight = "opengrad.cli:preflight_cli"
 opengrad-validate = "opengrad.registry.validate:main"
 opengrad-contamination = "opengrad.contamination.cli:main"
 

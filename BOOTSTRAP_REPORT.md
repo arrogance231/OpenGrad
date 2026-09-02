@@ -42,7 +42,7 @@ Processed dataset hashes and retained-after-filtering counts are unavailable bec
 
 ## 11. Prerequisites for first experiment
 
-Select a license; resolve dataset licenses/revisions; audit and hash source manifests; select baseline models and native protocols; freeze evaluator versions; define hardware/software capture; approve a baseline-only Phase 1 task.
+Resolve any remaining dataset-specific terms/revisions; audit and hash source manifests; select baseline models and native protocols; freeze evaluator versions; define hardware/software capture; approve a baseline-only Phase 1 task.
 
 ## 12. Recommended next research action
 

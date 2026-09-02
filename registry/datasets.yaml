@@ -1,164 +1,328 @@
 schema_version: 1
 status: BOOTSTRAP_NO_CORPORA_DOWNLOADED
 datasets:
-  - id: xlam-function-calling-60k
-    display_name: xLAM / APIGen Function Calling 60k
-    organization: Salesforce
-    hf_id: Salesforce/xlam-function-calling-60k
-    repository: null
-    papers: [apigen]
-    exact_revision: null
-    retrieval_date: null
-    license: UNKNOWN_PENDING_VERIFICATION
-    redistribution: NOT_ASSESSED
-    original_sample_count: null
-    retained_sample_count: null
-    preprocessing_version: null
-    checksum: null
-    category: tool_use
-    intended_stages: [future_sft]
-    allowed_splits: [train]
-    forbidden_splits: []
-    benchmark_overlap_risk: UNKNOWN_PENDING_AUDIT
-    known_source_overlap: UNKNOWN_PENDING_AUDIT
-    contamination_status: UNASSESSED
-    planned_initial_mixture_percent: 35
-    notes: Major function selection and argument-generation source; percentage is a hypothesis.
-  - id: when2call
-    display_name: NVIDIA When2Call
-    organization: NVIDIA
-    hf_id: nvidia/When2Call
-    repository: null
-    papers: [when2call]
-    exact_revision: null
-    retrieval_date: null
-    license: UNKNOWN_PENDING_VERIFICATION
-    redistribution: NOT_ASSESSED
-    original_sample_count: null
-    retained_sample_count: null
-    preprocessing_version: null
-    checksum: null
-    category: tool_use
-    intended_stages: [future_sft, future_preference, evaluation] 
-    allowed_splits: [train]
-    forbidden_splits: [preference, mcq_test, llm_judge_test]
-    benchmark_overlap_risk: HIGH_IF_TEST_LEAKS
-    known_source_overlap: UNKNOWN_PENDING_AUDIT
-    contamination_status: UNASSESSED
-    planned_initial_mixture_percent: 15
-    notes: Preserve split semantics; preference/test portions are not SFT data.
-  - id: toolace
-    display_name: ToolACE
-    organization: Team-ACE
-    hf_id: Team-ACE/ToolACE
-    repository: null
-    papers: [toolace]
-    exact_revision: null
-    retrieval_date: null
-    license: UNKNOWN_PENDING_VERIFICATION
-    redistribution: NOT_ASSESSED
-    original_sample_count: null
-    retained_sample_count: null
-    preprocessing_version: null
-    checksum: null
-    category: tool_use
-    intended_stages: [future_sft]
-    allowed_splits: []
-    forbidden_splits: []
-    benchmark_overlap_risk: UNKNOWN_PENDING_AUDIT
-    known_source_overlap: UNKNOWN_PENDING_AUDIT
-    contamination_status: UNASSESSED
-    planned_initial_mixture_percent: 15
-    notes: Complex schemas, candidate tools, parallel/dependent calls, and negatives.
-  - id: button
-    display_name: BUTTON / BUTTONInstruct
-    organization: PKU-Baichuan-MLSystemLab
-    hf_id: null
-    repository: https://github.com/PKU-Baichuan-MLSystemLab/BUTTON
-    papers: [button]
-    exact_revision: null
-    retrieval_date: null
-    license: UNKNOWN_PENDING_VERIFICATION
-    redistribution: NOT_ASSESSED
-    original_sample_count: null
-    retained_sample_count: null
-    preprocessing_version: null
-    checksum: null
-    category: tool_use
-    intended_stages: [future_sft]
-    allowed_splits: []
-    forbidden_splits: []
-    benchmark_overlap_risk: UNKNOWN_PENDING_AUDIT
-    known_source_overlap: UNKNOWN_PENDING_AUDIT
-    contamination_status: UNASSESSED
-    planned_initial_mixture_percent: 10
-    notes: Multi-turn compositional trajectories; do not expose source reasoning blindly.
-  - id: looptool-23k
-    display_name: LoopTool-23k
-    organization: zhangkangning
-    hf_id: zhangkangning/LoopTool-23k
-    repository: null
-    papers: [looptool]
-    exact_revision: null
-    retrieval_date: null
-    license: UNKNOWN_PENDING_VERIFICATION
-    redistribution: NOT_ASSESSED
-    original_sample_count: null
-    retained_sample_count: null
-    preprocessing_version: null
-    checksum: null
-    category: tool_use
-    intended_stages: [future_sft]
-    allowed_splits: []
-    forbidden_splits: []
-    benchmark_overlap_risk: UNKNOWN_PENDING_AUDIT
-    known_source_overlap: POSSIBLE_DERIVATION_OVERLAP
-    contamination_status: UNASSESSED
-    planned_initial_mixture_percent: 15
-    notes: Deduplication and source-lineage audit required.
-  - id: glaive-function-calling-v2
-    display_name: Glaive Function Calling v2
-    organization: glaiveai
-    hf_id: glaiveai/glaive-function-calling-v2
-    repository: null
-    papers: []
-    exact_revision: null
-    retrieval_date: null
-    license: UNKNOWN_PENDING_VERIFICATION
-    redistribution: NOT_ASSESSED
-    original_sample_count: null
-    retained_sample_count: null
-    preprocessing_version: null
-    checksum: null
-    category: tool_use
-    intended_stages: [future_sft]
-    allowed_splits: []
-    forbidden_splits: []
-    benchmark_overlap_risk: HIGH_IF_BENCHMARK_LIKE
-    known_source_overlap: UNKNOWN_PENDING_AUDIT
-    contamination_status: UNASSESSED
-    planned_initial_mixture_percent: 10
-    notes: Requires quality filtering; 30k retained examples is a hypothesis, not a hardcode.
-  - id: apigen-mt-5k
-    display_name: APIGen-MT-5k
-    organization: Salesforce
-    hf_id: Salesforce/APIGen-MT-5k
-    repository: null
-    papers: [apigen]
-    exact_revision: null
-    retrieval_date: null
-    license: UNKNOWN_PENDING_VERIFICATION
-    redistribution: NOT_ASSESSED
-    original_sample_count: null
-    retained_sample_count: null
-    preprocessing_version: null
-    checksum: null
-    category: tool_use
-    intended_stages: [future_contaminated_experiment_only]
-    allowed_splits: []
-    forbidden_splits: [clean_default]
-    benchmark_overlap_risk: HIGH_TAU_TAU2
-    known_source_overlap: POSSIBLE_TAU_BENCH_OVERLAP
-    contamination_status: EXCLUDED_FROM_CLEAN_DEFAULT
-    planned_initial_mixture_percent: 0
-    notes: If used, namespace as contaminated/apigen-mt; scores are not clean generalization.
+- id: xlam-function-calling-60k
+  display_name: xLAM / APIGen Function Calling 60k
+  organization: Salesforce
+  hf_id: Salesforce/xlam-function-calling-60k
+  repository: null
+  papers:
+  - apigen
+  retrieval_date: '2026-09-02'
+  license:
+    value: CC-BY-4.0
+    verified: true
+    source: https://huggingface.co/datasets/Salesforce/xlam-function-calling-60k
+  redistribution: NOT_ASSESSED
+  original_sample_count: null
+  retained_sample_count: null
+  preprocessing_version: null
+  checksum: null
+  category: tool_use
+  intended_stages:
+  - future_sft
+  allowed_splits:
+  - train
+  forbidden_splits: []
+  benchmark_overlap_risk: UNKNOWN_PENDING_AUDIT
+  known_source_overlap: UNKNOWN_PENDING_AUDIT
+  contamination_status: UNASSESSED
+  planned_initial_mixture_percent: 35
+  notes: Major function selection and argument-generation source; percentage is a
+    hypothesis. Metadata retrieved from the listed canonical source; current snapshot
+    revision is recorded above.
+  source_revision:
+    value: 26d14ebfe18b1f7b524bd39b404b50af5dc97866
+    verified: true
+    source: Hugging Face dataset snapshot API
+  sample_count:
+    published: 60000
+    verified_from: https://arxiv.org/abs/2406.18518
+  retained_after_filtering:
+    value: null
+    status: not_yet_processed
+  processed_dataset_hash:
+    value: null
+    status: pending_dataset_preparation
+  exact_revision: null
+  source_repository: https://huggingface.co/datasets/Salesforce/xlam-function-calling-60k
+- id: when2call
+  display_name: NVIDIA When2Call
+  organization: NVIDIA
+  hf_id: nvidia/When2Call
+  repository: null
+  papers:
+  - when2call
+  retrieval_date: '2026-09-02'
+  license:
+    value: CC-BY-4.0
+    verified: true
+    source: https://huggingface.co/datasets/nvidia/When2Call
+  redistribution: NOT_ASSESSED
+  original_sample_count: null
+  retained_sample_count: null
+  preprocessing_version: null
+  checksum: null
+  category: tool_use
+  intended_stages:
+  - future_sft
+  - future_preference
+  - evaluation
+  allowed_splits:
+  - train
+  forbidden_splits:
+  - preference
+  - mcq_test
+  - llm_judge_test
+  benchmark_overlap_risk: HIGH_IF_TEST_LEAKS
+  known_source_overlap: UNKNOWN_PENDING_AUDIT
+  contamination_status: UNASSESSED
+  planned_initial_mixture_percent: 15
+  notes: Preserve split semantics; preference/test portions are not SFT data. Metadata
+    retrieved from the listed canonical source; current snapshot revision is recorded
+    above.
+  source_revision:
+    value: 0582f7749df63a96fdc3070932e83e72396ace53
+    verified: true
+    source: Hugging Face dataset snapshot API
+  sample_count:
+    published: null
+    verified_from: null
+    status: unresolved_after_checked_sources
+  retained_after_filtering:
+    value: null
+    status: not_yet_processed
+  processed_dataset_hash:
+    value: null
+    status: pending_dataset_preparation
+  exact_revision: null
+  source_repository: https://github.com/NVIDIA/When2Call
+  published_split_sizes:
+    train_sft: null
+    train_pref: null
+    mcq: null
+    llm_judge: null
+    status: split names verified; row counts unresolved without materialization
+- id: toolace
+  display_name: ToolACE
+  organization: Team-ACE
+  hf_id: Team-ACE/ToolACE
+  repository: null
+  papers:
+  - toolace
+  retrieval_date: '2026-09-02'
+  license:
+    value: Apache-2.0
+    verified: true
+    source: https://huggingface.co/datasets/Team-ACE/ToolACE
+  redistribution: NOT_ASSESSED
+  original_sample_count: null
+  retained_sample_count: null
+  preprocessing_version: null
+  checksum: null
+  category: tool_use
+  intended_stages:
+  - future_sft
+  allowed_splits: []
+  forbidden_splits: []
+  benchmark_overlap_risk: UNKNOWN_PENDING_AUDIT
+  known_source_overlap: UNKNOWN_PENDING_AUDIT
+  contamination_status: UNASSESSED
+  planned_initial_mixture_percent: 15
+  notes: Complex schemas, candidate tools, parallel/dependent calls, and negatives.
+    Metadata retrieved from the listed canonical source; current snapshot revision
+    is recorded above.
+  source_revision:
+    value: 6bda777c88d21e5a204703c1ee45597a8fa4f734
+    verified: true
+    source: Hugging Face dataset snapshot API
+  sample_count:
+    published: null
+    verified_from: null
+    status: unresolved_after_checked_sources
+  retained_after_filtering:
+    value: null
+    status: not_yet_processed
+  processed_dataset_hash:
+    value: null
+    status: pending_dataset_preparation
+  exact_revision: null
+  source_repository: https://huggingface.co/datasets/Team-ACE/ToolACE
+- id: button
+  display_name: BUTTON / BUTTONInstruct
+  organization: PKU-Baichuan-MLSystemLab
+  hf_id: null
+  repository: https://github.com/PKU-Baichuan-MLSystemLab/BUTTON
+  papers:
+  - button
+  retrieval_date: '2026-09-02'
+  license:
+    value: CC-BY-4.0
+    verified: true
+    source: https://github.com/PKU-Baichuan-MLSystemLab/BUTTON
+  redistribution: NOT_ASSESSED
+  original_sample_count: null
+  retained_sample_count: null
+  preprocessing_version: null
+  checksum: null
+  category: tool_use
+  intended_stages:
+  - future_sft
+  allowed_splits: []
+  forbidden_splits: []
+  benchmark_overlap_risk: UNKNOWN_PENDING_AUDIT
+  known_source_overlap: UNKNOWN_PENDING_AUDIT
+  contamination_status: UNASSESSED
+  planned_initial_mixture_percent: 10
+  notes: Multi-turn compositional trajectories; do not expose source reasoning blindly.
+    Metadata retrieved from the listed canonical source; current snapshot revision
+    is recorded above.
+  source_revision:
+    value: 47cb720ed223b249a2f1d0a3faf1cb1eb7175622
+    verified: true
+    source: https://github.com/PKU-Baichuan-MLSystemLab/BUTTON/commit/47cb720ed223b249a2f1d0a3faf1cb1eb7175622
+  sample_count:
+    published: 8000
+    verified_from: https://github.com/PKU-Baichuan-MLSystemLab/BUTTON
+  retained_after_filtering:
+    value: null
+    status: not_yet_processed
+  processed_dataset_hash:
+    value: null
+    status: pending_dataset_preparation
+  exact_revision: null
+  source_repository: https://github.com/PKU-Baichuan-MLSystemLab/BUTTON
+  published_split_sizes:
+    BUTTONInstruct: 8000
+- id: looptool-23k
+  display_name: LoopTool-23k
+  organization: zhangkangning
+  hf_id: zhangkangning/LoopTool-23k
+  repository: null
+  papers:
+  - looptool
+  retrieval_date: '2026-09-02'
+  license:
+    value: Apache-2.0
+    verified: true
+    source: https://huggingface.co/datasets/zhangkangning/LoopTool-23k
+  redistribution: NOT_ASSESSED
+  original_sample_count: null
+  retained_sample_count: null
+  preprocessing_version: null
+  checksum: null
+  category: tool_use
+  intended_stages:
+  - future_sft
+  allowed_splits: []
+  forbidden_splits: []
+  benchmark_overlap_risk: UNKNOWN_PENDING_AUDIT
+  known_source_overlap: POSSIBLE_DERIVATION_OVERLAP
+  contamination_status: UNASSESSED
+  planned_initial_mixture_percent: 15
+  notes: Deduplication and source-lineage audit required. Metadata retrieved from
+    the listed canonical source; current snapshot revision is recorded above.
+  source_revision:
+    value: b6c572d442ed4f2177f23645d8e9a77522e712c3
+    verified: true
+    source: Hugging Face dataset snapshot API
+  sample_count:
+    published: 23040
+    verified_from: https://huggingface.co/datasets/zhangkangning/LoopTool-23k
+  retained_after_filtering:
+    value: null
+    status: not_yet_processed
+  processed_dataset_hash:
+    value: null
+    status: pending_dataset_preparation
+  exact_revision: null
+  source_repository: https://huggingface.co/datasets/zhangkangning/LoopTool-23k
+- id: glaive-function-calling-v2
+  display_name: Glaive Function Calling v2
+  organization: glaiveai
+  hf_id: glaiveai/glaive-function-calling-v2
+  repository: null
+  papers: []
+  retrieval_date: '2026-09-02'
+  license:
+    value: Apache-2.0
+    verified: true
+    source: https://huggingface.co/datasets/glaiveai/glaive-function-calling-v2
+  redistribution: NOT_ASSESSED
+  original_sample_count: null
+  retained_sample_count: null
+  preprocessing_version: null
+  checksum: null
+  category: tool_use
+  intended_stages:
+  - future_sft
+  allowed_splits: []
+  forbidden_splits: []
+  benchmark_overlap_risk: HIGH_IF_BENCHMARK_LIKE
+  known_source_overlap: UNKNOWN_PENDING_AUDIT
+  contamination_status: UNASSESSED
+  planned_initial_mixture_percent: 10
+  notes: Requires quality filtering; 30k retained examples is a hypothesis, not a
+    hardcode. Metadata retrieved from the listed canonical source; current snapshot
+    revision is recorded above.
+  source_revision:
+    value: e7f4b6456019f5d8bcb991ef0dd67d8ff23221ac
+    verified: true
+    source: Hugging Face dataset snapshot API
+  sample_count:
+    published: null
+    verified_from: null
+    status: unresolved_after_checked_sources
+  retained_after_filtering:
+    value: null
+    status: not_yet_processed
+  processed_dataset_hash:
+    value: null
+    status: pending_dataset_preparation
+  exact_revision: null
+  source_repository: https://huggingface.co/datasets/glaiveai/glaive-function-calling-v2
+- id: apigen-mt-5k
+  display_name: APIGen-MT-5k
+  organization: Salesforce
+  hf_id: Salesforce/APIGen-MT-5k
+  repository: null
+  papers:
+  - apigen
+  retrieval_date: '2026-09-02'
+  license:
+    value: CC-BY-NC-4.0
+    verified: true
+    source: https://huggingface.co/datasets/Salesforce/APIGen-MT-5k
+  redistribution: NOT_ASSESSED
+  original_sample_count: null
+  retained_sample_count: null
+  preprocessing_version: null
+  checksum: null
+  category: tool_use
+  intended_stages:
+  - future_contaminated_experiment_only
+  allowed_splits: []
+  forbidden_splits:
+  - clean_default
+  benchmark_overlap_risk: HIGH_TAU_TAU2
+  known_source_overlap: POSSIBLE_TAU_BENCH_OVERLAP
+  contamination_status: EXCLUDED_FROM_CLEAN_DEFAULT
+  planned_initial_mixture_percent: 0
+  notes: If used, namespace as contaminated/apigen-mt; scores are not clean generalization.
+    Metadata retrieved from the listed canonical source; current snapshot revision
+    is recorded above.
+  source_revision:
+    value: abc4a517d67c541f85f6470cbd8fd3186b36830e
+    verified: true
+    source: Hugging Face dataset snapshot API
+  sample_count:
+    published: 5000
+    verified_from: https://huggingface.co/datasets/Salesforce/APIGen-MT-5k
+  retained_after_filtering:
+    value: null
+    status: not_yet_processed
+  processed_dataset_hash:
+    value: null
+    status: pending_dataset_preparation
+  exact_revision: null
+  source_repository: https://huggingface.co/datasets/Salesforce/APIGen-MT-5k

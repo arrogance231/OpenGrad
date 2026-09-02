@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Reproducible research infrastructure for capability-efficiency studies of small open-weight language models."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "License not selected; see NOTICE" }
+license = { file = "LICENSE" }
 authors = [{ name = "OpenGrad contributors" }]
 dependencies = []
 

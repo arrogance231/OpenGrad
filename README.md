@@ -36,4 +36,4 @@ Small-Mind Companion, SchemaForge, and `arrochi112/onebee-gf-distill-v1` are rel
 
 ## Roadmap and citation
 
-See `ROADMAP.md` and `BOOTSTRAP_REPORT.md`. The project license is not selected yet; see `NOTICE`.
+See `ROADMAP.md` and `BOOTSTRAP_REPORT.md`. OpenGrad source code is licensed under Apache-2.0; third-party assets retain their own terms.

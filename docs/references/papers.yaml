@@ -1,0 +1,488 @@
+schema_version: 2
+verification_policy: Fields are independently verified; unresolved fields remain null
+  with checked_sources and limitations.
+papers:
+- id: apigen
+  title: 'APIGen: Automated Pipeline for Generating Verifiable and Diverse Function-Calling
+    Datasets'
+  authors:
+  - Zuxin Liu
+  - Thai Hoang
+  - Jianguo Zhang
+  - Ming Zhu
+  - Tian Lan
+  - Shirley Kokane
+  - Juntao Tan
+  - Weiran Yao
+  - Zhiwei Liu
+  - Yihao Feng
+  - Rithesh Murthy
+  - Liangwei Yang
+  - Silvio Savarese
+  - Juan Carlos Niebles
+  - Huan Wang
+  - Shelby Heinecke
+  - Caiming Xiong
+  year: 2024
+  venue: arXiv
+  arxiv: '2406.18518'
+  doi: null
+  canonical_url: https://arxiv.org/abs/2406.18518
+  official_implementation: https://apigen-pipeline.github.io/
+  category: tool_use_data
+  methodology_summary: 'Three-stage verification: format checking, executable function
+    validation, and semantic verification; the paper reports 3,673 APIs across 21
+    categories and a 60,000-entry release.'
+  implementation_relevance: Canonical source for xLAM/APIGen data design.
+  limitations: Dataset license and exact release lineage are tracked separately in
+    registry/datasets.yaml.
+  checked_sources:
+  - https://arxiv.org/abs/2406.18518
+  - https://huggingface.co/datasets/Salesforce/xlam-function-calling-60k
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: when2call
+  title: 'When2Call: When (not) to Call Tools'
+  authors:
+  - Hayley Ross
+  - Ameya Sunil Mahabaleshwarkar
+  - Yoshi Suhara
+  year: 2025
+  venue: NAACL 2025
+  arxiv: '2504.18851'
+  doi: null
+  canonical_url: https://arxiv.org/abs/2504.18851
+  official_implementation: https://github.com/NVIDIA/When2Call
+  category: tool_use_evaluation
+  methodology_summary: Benchmark and training data target tool-call decisions, follow-up
+    questions, and admitting that available tools cannot answer; releases SFT, preference,
+    MCQ, and LLM-judge components.
+  implementation_relevance: Primary call/no-call/clarification evaluation and optional
+    future preference study.
+  limitations: The test/preference splits must not enter clean SFT.
+  checked_sources:
+  - https://arxiv.org/abs/2504.18851
+  - https://github.com/NVIDIA/When2Call
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: toolace
+  title: 'ToolACE: Winning the Points of LLM Function Calling'
+  authors:
+  - Weiwen Liu
+  - Xu Huang
+  - Xingshan Zeng
+  - Xinlong Hao
+  - Shuai Yu
+  - Dexun Li
+  - Shuai Wang
+  - Weinan Gan
+  - Zhengying Liu
+  - Yuanqing Yu
+  - Z. Wang
+  - Yuxian Wang
+  - Ning Wu
+  - Yutai Hou
+  - Bin Wang
+  - Chuhan Wu
+  - Xinzhi Wang
+  - Yong Liu
+  - Yasheng Wang
+  - Duyu Tang
+  - Dandan Tu
+  - Lifeng Shang
+  - Xin Jiang
+  - Ruiming Tang
+  - Defu Lian
+  - Qun Liu
+  - Enhong Chen
+  year: 2024
+  venue: arXiv
+  arxiv: '2409.00920'
+  doi: 10.48550/arXiv.2409.00920
+  canonical_url: https://arxiv.org/abs/2409.00920
+  official_implementation: null
+  category: tool_use_data
+  methodology_summary: Self-evolution synthesis over a large API pool with rule-based
+    and model-based verification; OpenAlex resolves the paper title, year, DOI, and
+    arXiv identifier.
+  implementation_relevance: Complex schemas, candidate selection, parallel/dependent
+    calls.
+  limitations: Dataset release details and official implementation URL remain unresolved.
+  checked_sources:
+  - https://arxiv.org/abs/2409.00920
+  - https://huggingface.co/datasets/Team-ACE/ToolACE
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: button
+  title: Facilitating Multi-turn Function Calling for LLMs via Compositional Instruction
+    Tuning
+  authors:
+  - Mingyang Chen
+  - Haoze Sun
+  - Tianpeng Li
+  - Fan Yang
+  - Hao Liang
+  - Keer Lu
+  - Bin Cui
+  - Wentao Zhang
+  - Zenan Zhou
+  - Weipeng Chen
+  year: 2024
+  venue: arXiv
+  arxiv: '2410.12952'
+  doi: null
+  canonical_url: https://arxiv.org/abs/2410.12952
+  official_implementation: https://github.com/PKU-Baichuan-MLSystemLab/BUTTON
+  category: tool_use_data
+  methodology_summary: BUTTON uses bottom-up atomic/compositional task construction
+    and top-down multi-agent trajectory generation; BUTTONInstruct reports 8k data
+    points.
+  implementation_relevance: Multi-turn, sequential dependencies, parallel calls, observation
+    consumption.
+  limitations: Source prompts expose reasoning-like text and require normalization
+    decisions.
+  checked_sources:
+  - https://arxiv.org/abs/2410.12952
+  - https://github.com/PKU-Baichuan-MLSystemLab/BUTTON
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: looptool
+  title: Closing the Data–Training Loop for Robust LLM Tool Calls
+  authors: []
+  year: 2025
+  venue: null
+  arxiv: null
+  doi: null
+  canonical_url: https://huggingface.co/datasets/zhangkangning/LoopTool-23k
+  official_implementation: null
+  category: tool_use_data
+  methodology_summary: The dataset card describes a model-aware iterative data-generation/training
+    loop and 23,040 samples involving 20,813 APIs.
+  implementation_relevance: Hard cases and multi-turn robustness.
+  limitations: Paper identifier and independent source-lineage verification remain
+    unresolved.
+  checked_sources:
+  - https://huggingface.co/datasets/zhangkangning/LoopTool-23k
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: dpo
+  title: 'Direct Preference Optimization: Your Language Model is Secretly a Reward
+    Model'
+  authors:
+  - Rafael Rafailov
+  - Archit Sharma
+  - Eric Mitchell
+  - Stefano Ermon
+  - Christopher D. Manning
+  - Chelsea Finn
+  year: 2023
+  venue: NeurIPS 2023
+  arxiv: '2305.18290'
+  doi: 10.48550/arXiv.2305.18290
+  canonical_url: https://arxiv.org/abs/2305.18290
+  official_implementation: null
+  category: preference_optimization
+  methodology_summary: Reparameterizes preference optimization so a policy can be
+    optimized directly from preference data without separately fitting a reward model.
+  implementation_relevance: Future comparison only when an evaluation diagnosis justifies
+    it.
+  limitations: No OpenGrad preference experiment has begun.
+  checked_sources:
+  - https://arxiv.org/abs/2305.18290
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: orpo
+  title: 'ORPO: Monolithic Preference Optimization without Reference Model'
+  authors:
+  - Jiwoo Hong
+  - Noah Lee
+  - James Thorne
+  year: 2024
+  venue: EMNLP 2024
+  arxiv: null
+  doi: 10.18653/v1/2024.emnlp-main.626
+  canonical_url: https://aclanthology.org/2024.emnlp-main.626/
+  official_implementation: null
+  category: preference_optimization
+  methodology_summary: Combines a conventional likelihood objective with an odds-ratio
+    preference term without a separate reference model.
+  implementation_relevance: Future ablation against SFT if justified.
+  limitations: No OpenGrad preference experiment has begun.
+  checked_sources:
+  - https://aclanthology.org/2024.emnlp-main.626/
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: gkd
+  title: 'On-Policy Distillation of Language Models: Learning from Self-Generated
+    Mistakes'
+  authors: []
+  year: 2023
+  venue: arXiv
+  arxiv: '2306.13649'
+  doi: null
+  canonical_url: https://arxiv.org/abs/2306.13649
+  official_implementation: null
+  category: distillation
+  methodology_summary: Studies distillation on student-generated trajectories so the
+    teacher supplies learning signal on the student state distribution.
+  implementation_relevance: Future on-policy distillation interface.
+  limitations: Author and venue fields require primary-source extraction before finalizing.
+  checked_sources:
+  - https://arxiv.org/abs/2306.13649
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: star
+  title: STAR / teacher-assisted function-calling refinement
+  authors: []
+  year: null
+  venue: null
+  arxiv: null
+  doi: null
+  canonical_url: null
+  official_implementation: null
+  category: distillation
+  methodology_summary: Research queue entry retained from the project brief; exact
+    canonical paper identity was not established from the checked sources.
+  implementation_relevance: Potential teacher-assisted function-call correction/refinement.
+  limitations: Title identity, authors, identifier, and implementation are unresolved;
+    do not cite as verified scholarship.
+  checked_sources:
+  - https://github.com/search?q=STAR+function+calling&type=repositories
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: toolsandbox
+  title: 'ToolSandbox: A Stateful, Conversational, Interactive Evaluation Benchmark
+    for LLM Tool Use Capabilities'
+  authors:
+  - Jiarui Lu
+  - Thomas Holleis
+  - Yizhe Zhang
+  - Bernhard Aumayer
+  - Nan Feng
+  - Haoping Bai
+  - Shuang Ma
+  - Shen Ma
+  - Mengyu Li
+  - Guoli Yin
+  - Zirui Wang
+  - Ruoming Pang
+  year: 2025
+  venue: Findings of NAACL 2025
+  arxiv: null
+  doi: 10.18653/v1/2025.findings-naacl.65
+  canonical_url: https://aclanthology.org/2025.findings-naacl.65/
+  official_implementation: null
+  category: evaluation
+  methodology_summary: Stateful, conversational, interactive benchmark for tool-use
+    capabilities.
+  implementation_relevance: Multi-turn state, tool environment interaction, and observation
+    grounding.
+  limitations: Repository/evaluator revision unresolved.
+  checked_sources:
+  - https://aclanthology.org/2025.findings-naacl.65/
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: mcpmark
+  title: 'MCPMark: A Benchmark for Stress-Testing Realistic and Comprehensive MCP
+    Use'
+  authors:
+  - Zijian Wu
+  - Xiangyan Liu
+  - Xinyuan Zhang
+  - Lingjun Chen
+  - Fanqing Meng
+  - Lingbin Du
+  - Yiran Zhao
+  - Fanshi Zhang
+  - Yumin Ye
+  - Jiawei Wang
+  - Z. Wang
+  - Jinjie Ni
+  - Yufan Yang
+  - Aiqiang Xu
+  - Michael Qizhe Shieh
+  year: 2025
+  venue: arXiv
+  arxiv: '2509.24002'
+  doi: 10.48550/arXiv.2509.24002
+  canonical_url: https://arxiv.org/abs/2509.24002
+  official_implementation: null
+  category: evaluation
+  methodology_summary: Benchmark focused on realistic and comprehensive MCP use; OpenAlex
+    resolves the title, year, and arXiv identifier.
+  implementation_relevance: Stretch evaluation for MCP tools.
+  limitations: Verified benchmark release and evaluator revision remain unresolved.
+  checked_sources:
+  - https://arxiv.org/abs/2509.24002
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: bfcl
+  title: Gorilla / Berkeley Function Calling Leaderboard V4
+  authors: []
+  year: null
+  venue: null
+  arxiv: null
+  doi: null
+  canonical_url: https://github.com/ShishirPatil/gorilla
+  official_implementation: https://github.com/ShishirPatil/gorilla
+  category: evaluation
+  methodology_summary: Evaluation repository describes Gorilla training/evaluation
+    for function calls; BFCL V4 version pin must be captured from the release used.
+  implementation_relevance: Primary structured function-call evaluation.
+  limitations: Exact V4 commit/evaluator version remains unresolved until evaluation
+    setup.
+  checked_sources:
+  - https://github.com/ShishirPatil/gorilla
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: tau
+  title: τ-bench / τ²
+  authors: []
+  year: null
+  venue: null
+  arxiv: null
+  doi: null
+  canonical_url: https://github.com/sierra-research/tau-bench
+  official_implementation: https://github.com/sierra-research/tau-bench
+  category: evaluation
+  methodology_summary: Tool-agent benchmark repository provides task-environment evaluation;
+    exact τ² release metadata must be pinned per run.
+  implementation_relevance: Long-horizon airline/retail-style evaluation.
+  limitations: APIGen-MT contamination policy remains mandatory.
+  checked_sources:
+  - https://github.com/sierra-research/tau-bench
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: toolathlon
+  title: Toolathlon / Tool Decathlon
+  authors: []
+  year: null
+  venue: null
+  arxiv: null
+  doi: null
+  canonical_url: null
+  official_implementation: null
+  category: evaluation
+  methodology_summary: Research queue entry; exact canonical paper/repository was
+    not established from checked authoritative sources.
+  implementation_relevance: Stretch long-horizon evaluation.
+  limitations: All identifiers, authors, version, and implementation unresolved.
+  checked_sources:
+  - https://github.com/search?q=Toolathlon&type=repositories
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: speculative-decoding
+  title: Fast Inference from Transformers via Speculative Decoding
+  authors: []
+  year: 2023
+  venue: ICML 2023
+  arxiv: '2211.17192'
+  doi: null
+  canonical_url: https://arxiv.org/abs/2211.17192
+  official_implementation: null
+  category: inference
+  methodology_summary: Draft model proposes tokens and a target model verifies them,
+    preserving target sampling while reducing target-model serial work.
+  implementation_relevance: Future draft/target comparisons; not implemented in Phase
+    0.
+  limitations: Exact author list and implementation are not populated yet.
+  checked_sources:
+  - https://arxiv.org/abs/2211.17192
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: medusa
+  title: 'Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding
+    Heads'
+  authors: []
+  year: 2024
+  venue: ICML 2024
+  arxiv: '2401.10774'
+  doi: null
+  canonical_url: https://arxiv.org/abs/2401.10774
+  official_implementation: https://github.com/FasterDecoding/Medusa
+  category: inference
+  methodology_summary: Adds multiple decoding heads to predict several future tokens
+    and verifies candidates efficiently.
+  implementation_relevance: Multi-token prediction / architecture-integrated drafter
+    queue.
+  limitations: No implementation or benchmark run in OpenGrad.
+  checked_sources:
+  - https://arxiv.org/abs/2401.10774
+  - https://github.com/FasterDecoding/Medusa
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: llama-cpp
+  title: llama.cpp
+  authors: []
+  year: null
+  venue: null
+  arxiv: null
+  doi: null
+  canonical_url: https://github.com/ggml-org/llama.cpp
+  official_implementation: https://github.com/ggml-org/llama.cpp
+  category: inference
+  methodology_summary: C/C++ local inference ecosystem for GGUF models across CPU
+    and accelerator backends.
+  implementation_relevance: Future local/mobile runtime integration.
+  limitations: Version and device measurements are future-phase fields.
+  checked_sources:
+  - https://github.com/ggml-org/llama.cpp
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: gguf
+  title: GGUF file format
+  authors: []
+  year: null
+  venue: null
+  arxiv: null
+  doi: null
+  canonical_url: https://github.com/ggml-org/ggml/blob/master/docs/gguf.md
+  official_implementation: https://github.com/ggml-org/ggml
+  category: inference
+  methodology_summary: Binary model format documentation maintained in the ggml project.
+  implementation_relevance: Future model export/interoperability metadata.
+  limitations: Format revision must be pinned per export.
+  checked_sources:
+  - https://github.com/ggml-org/ggml/blob/master/docs/gguf.md
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: executorch
+  title: ExecuTorch
+  authors: []
+  year: null
+  venue: null
+  arxiv: null
+  doi: null
+  canonical_url: https://github.com/pytorch/executorch
+  official_implementation: https://github.com/pytorch/executorch
+  category: inference
+  methodology_summary: PyTorch edge deployment stack for exporting and running models
+    on constrained devices.
+  implementation_relevance: Future `.pte` and device studies.
+  limitations: Runtime/device verification is future-phase work.
+  checked_sources:
+  - https://github.com/pytorch/executorch
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: kleidiai
+  title: KleidiAI
+  authors: []
+  year: null
+  venue: null
+  arxiv: null
+  doi: null
+  canonical_url: https://github.com/ARM-software/kleidiai
+  official_implementation: https://github.com/ARM-software/kleidiai
+  category: inference
+  methodology_summary: Arm software library of optimized compute kernels for AI workloads.
+  implementation_relevance: Future ARM/mobile kernel comparisons.
+  limitations: Exact integration and supported kernel/version matrix require execution.
+  checked_sources:
+  - https://github.com/ARM-software/kleidiai
+  verification_status: field_level_verified_with_explicit_unresolved_fields
+- id: edgellm
+  title: 'EdgeLLM: Fast On-Device LLM Inference With Speculative Decoding'
+  authors:
+  - Daliang Xu
+  - Wangsong Yin
+  - Hao Zhang
+  - Xin Jin
+  - Ying Zhang
+  - Shiyun Wei
+  - Mengwei Xu
+  - Xuanzhe Liu
+  year: 2024
+  venue: IEEE Transactions on Mobile Computing
+  arxiv: null
+  doi: 10.1109/TMC.2024.3513457
+  canonical_url: https://doi.org/10.1109/TMC.2024.3513457
+  official_implementation: null
+  category: inference
+  methodology_summary: On-device LLM inference work combining edge deployment and
+    speculative decoding; metadata resolved through OpenAlex DOI record.
+  implementation_relevance: Relevant mobile efficiency research queue.
+  limitations: Full implementation and reproducibility details remain to be read.
+  checked_sources:
+  - https://doi.org/10.1109/TMC.2024.3513457
+  verification_status: field_level_verified_with_explicit_unresolved_fields

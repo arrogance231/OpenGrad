@@ -32,7 +32,7 @@ The first planned study concerns reliable tool use in small models:
 
 ### Inference and systems efficiency
 
-OpenGrad's primary systems focus is research on faster generation: speculative decoding, native multi-token prediction (MTP) heads, external draft/target pairs, and architecture-aware decoding methods. OpenWeights is the downstream execution environment for compatible checkpoints, including GGUF/llama.cpp and ExecuTorch `.pte` deployment on practical devices. OpenGrad supplies the experimental methods, model-side changes, provenance, and evaluation definitions; OpenWeights handles device-side execution and measurements. Capability and efficiency are evaluated separately before they are considered jointly.
+OpenGrad's primary systems focus is research on faster generation: speculative decoding, native multi-token prediction (MTP) heads, external draft/target pairs, and architecture-aware decoding methods. **[OpenWeights](https://github.com/alpharomercoma/openweights)** is the downstream execution environment for compatible checkpoints, including GGUF/llama.cpp and ExecuTorch `.pte` deployment on practical devices. OpenGrad supplies the experimental methods, model-side changes, provenance, and evaluation definitions; OpenWeights handles device-side execution and measurements. Capability and efficiency are evaluated separately before they are considered jointly.
 
 OpenGrad is model-agnostic. Model-family adapters are designed for Qwen, LFM, Gemma, Llama, Phi, SmolLM, and future small open-weight models without imposing one universal tool protocol.
 

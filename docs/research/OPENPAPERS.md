@@ -1,6 +1,6 @@
 # OpenPapers workflow
 
-OpenPapers is the preferred optional research-reference interface for OpenGrad. At the inspected revision `5174637cacdd83dcfaf147c93b11f2633f944d7e` on `master`, it is an Apache-2.0 MCP server for scholarly retrieval, paper ingestion, and reproducible research workflows.
+OpenPapers is the preferred optional research-reference interface for OpenGrad ([repository](https://github.com/arrogance231/openpapers)). At the inspected revision `5174637cacdd83dcfaf147c93b11f2633f944d7e` on `master`, it is an Apache-2.0 MCP server for scholarly retrieval, paper ingestion, and reproducible research workflows.
 
 It provides replaceable adapters for arXiv, Crossref, OpenAlex, Semantic Scholar, GitHub, and Hugging Face; preserves DOI/arXiv/provider identities; discovers citations and implementations; reads bounded paper and repository content without executing it; and records evidence, uncertainty, conflicts, and provider failures. It can run over stdio or Streamable HTTP and uses local SQLite or PostgreSQL/pgvector storage.
 

@@ -1,1 +1,1 @@
-{"mcpServers":{"openpapers":{"command":"REPLACE_WITH_OPENPAPERS_COMMAND","args":[]}}}
+{"mcpServers":{"openpapers":{"command":"node","args":["/path/to/openpapers/dist/mcp/server.js"]}}}

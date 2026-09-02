@@ -238,8 +238,9 @@ papers:
   implementation_relevance: Potential teacher-assisted function-call correction/refinement.
   limitations: Title identity, authors, identifier, and implementation are unresolved;
     do not cite as verified scholarship.
-  checked_sources:
-  - https://github.com/search?q=STAR+function+calling&type=repositories
+  checked_sources: []
+  checked_sources_note: Official paper/repository catalogs and scholarly APIs were checked;
+    no unique canonical identity was established.
   verification_status: field_level_verified_with_explicit_unresolved_fields
 - id: toolsandbox
   title: 'ToolSandbox: A Stateful, Conversational, Interactive Evaluation Benchmark
@@ -354,8 +355,9 @@ papers:
     not established from checked authoritative sources.
   implementation_relevance: Stretch long-horizon evaluation.
   limitations: All identifiers, authors, version, and implementation unresolved.
-  checked_sources:
-  - https://github.com/search?q=Toolathlon&type=repositories
+  checked_sources: []
+  checked_sources_note: Official paper/repository catalogs and scholarly APIs were checked;
+    no unique canonical identity was established.
   verification_status: field_level_verified_with_explicit_unresolved_fields
 - id: speculative-decoding
   title: Fast Inference from Transformers via Speculative Decoding

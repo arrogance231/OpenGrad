@@ -4,13 +4,13 @@ OpenPapers is the preferred optional research-reference interface for OpenGrad. 
 
 It provides replaceable adapters for arXiv, Crossref, OpenAlex, Semantic Scholar, GitHub, and Hugging Face; preserves DOI/arXiv/provider identities; discovers citations and implementations; reads bounded paper and repository content without executing it; and records evidence, uncertainty, conflicts, and provider failures. It can run over stdio or Streamable HTTP and uses local SQLite or PostgreSQL/pgvector storage.
 
-## Agent workflow
+## Research workflow
 
-1. Ask OpenPapers for a title or identifier search.
+1. Search OpenPapers by title or identifier.
 2. Resolve the candidate with a provider-native identifier (`arXiv`, DOI, or OpenAlex ID).
-3. Retrieve the paper metadata and, when needed, bounded paper sections or implementation files.
+3. Retrieve paper metadata and, when needed, bounded paper sections or implementation files.
 4. Record the source URL, revision/blob, locator, and evidence strength in `docs/references/papers.yaml` and an implementation note.
-5. Independently check the canonical paper/project or dataset page before treating a field as verified. OpenPapers improves provenance and discovery; it does not replace primary-source judgment.
+5. Check the canonical paper, project, or dataset page before treating a field as verified. OpenPapers improves provenance and discovery; it does not replace primary-source judgment.
 6. Keep recommendations and implementation hypotheses separate from factual evidence.
 
 A citation discovered through OpenPapers enters OpenGrad only after its source identity and relevant fields are recorded. Missing fields remain `null` with an explicit status and a `checked_sources` list.

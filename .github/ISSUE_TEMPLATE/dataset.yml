@@ -1,0 +1,10 @@
+name: Dataset issue
+description: Report a dataset metadata, license, split, or contamination concern
+body:
+  - type: textarea
+    id: issue
+    attributes:
+      label: Concern
+      description: Include source ID and evidence URL/revision.
+    validations:
+      required: true

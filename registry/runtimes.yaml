@@ -1,0 +1,22 @@
+schema_version: 1
+runtimes:
+  - id: transformers
+    kind: training_and_eval
+    version: null
+    supported_platforms: [cpu, cuda, rocm]
+    status: interface_only
+  - id: llama-cpp
+    kind: inference
+    version: null
+    supported_platforms: [cpu, cuda, metal, vulkan, arm]
+    status: interface_only
+  - id: executorch
+    kind: inference
+    version: null
+    supported_platforms: [cpu, arm, mobile]
+    status: interface_only
+  - id: speculative-decoding
+    kind: future_inference_research
+    version: null
+    supported_platforms: []
+    status: reserved_not_implemented

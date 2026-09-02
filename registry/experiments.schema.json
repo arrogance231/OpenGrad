@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenGrad experiment record",
+  "type": "object",
+  "required": [
+    "run_id",
+    "status",
+    "research_question",
+    "hypothesis",
+    "model_id",
+    "dataset_manifest",
+    "benchmark_versions",
+    "config"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._/-]*$"
+    },
+    "status": {
+      "enum": [
+        "PLANNED",
+        "RUNNING",
+        "FAILED",
+        "REJECTED",
+        "EXPERIMENTAL",
+        "CANDIDATE",
+        "ACCEPTED",
+        "FINAL"
+      ]
+    },
+    "research_question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "hypothesis": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parent_checkpoint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "git_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "model_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_revision": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dataset_manifest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataset_hash": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "benchmark_versions": {
+      "type": "object"
+    },
+    "config": {
+      "type": "string",
+      "minLength": 1
+    },
+    "seed": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "hardware": {
+      "type": "object"
+    },
+    "software": {
+      "type": "object"
+    },
+    "compute_provider": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_checkpoint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "result_checkpoint": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "training_tokens": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "metrics": {
+      "type": "object"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "decision": {
+      "type": "string"
+    },
+    "failure_analysis": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true
+}

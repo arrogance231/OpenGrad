@@ -1,0 +1,5 @@
+config_id: contaminated-apigen-mt
+status: EXCLUDED_FROM_CLEAN_DEFAULT
+source_manifests: [apigen-mt-5k]
+allowed_namespace: contaminated/apigen-mt
+tau_scores_are_clean_generalization: false

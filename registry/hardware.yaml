@@ -1,0 +1,3 @@
+schema_version: 1
+hardware_records: []
+# Capture GPU/accelerator, VRAM, driver, CUDA/ROCm, CPU, RAM, OS/kernel, SoC/backend, quantization, thermal and power state when measurable.

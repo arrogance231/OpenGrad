@@ -1,0 +1,7 @@
+config_id: tool-calling-mixture-v1
+status: HYPOTHESIS_ONLY
+phase: 0
+source_manifests: [xlam-function-calling-60k, when2call, toolace, button, looptool-23k, glaive-function-calling-v2]
+weights_are_not_final: true
+normalization: canonical_then_model_native_renderer
+contamination_scan_required: true

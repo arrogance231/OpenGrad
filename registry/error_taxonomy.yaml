@@ -1,0 +1,23 @@
+schema_version: 1
+taxonomies:
+  tool_use:
+    E01: unnecessary_tool_call
+    E02: missed_tool_call
+    E03: wrong_tool
+    E04: missing_required_arg
+    E05: hallucinated_arg
+    E06: wrong_arg_type
+    E07: wrong_arg_value
+    E08: failed_clarification
+    E09: false_cannot_answer
+    E10: invalid_json
+    E11: invalid_tool_name
+    E12: parallelization_error
+    E13: dependency_order_error
+    E14: ignored_observation
+    E15: fabricated_tool_result
+    E16: repeated_call_loop
+    E17: premature_final_answer
+    E18: source_wrapper_leak
+    E19: eos_failure
+    E20: multi_turn_state_loss

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "run_id",
+    "status"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "compute_provider": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "hardware": {
+      "type": "object"
+    }
+  }
+}

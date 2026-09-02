@@ -1,0 +1,164 @@
+schema_version: 1
+status: BOOTSTRAP_NO_CORPORA_DOWNLOADED
+datasets:
+  - id: xlam-function-calling-60k
+    display_name: xLAM / APIGen Function Calling 60k
+    organization: Salesforce
+    hf_id: Salesforce/xlam-function-calling-60k
+    repository: null
+    papers: [apigen]
+    exact_revision: null
+    retrieval_date: null
+    license: UNKNOWN_PENDING_VERIFICATION
+    redistribution: NOT_ASSESSED
+    original_sample_count: null
+    retained_sample_count: null
+    preprocessing_version: null
+    checksum: null
+    category: tool_use
+    intended_stages: [future_sft]
+    allowed_splits: [train]
+    forbidden_splits: []
+    benchmark_overlap_risk: UNKNOWN_PENDING_AUDIT
+    known_source_overlap: UNKNOWN_PENDING_AUDIT
+    contamination_status: UNASSESSED
+    planned_initial_mixture_percent: 35
+    notes: Major function selection and argument-generation source; percentage is a hypothesis.
+  - id: when2call
+    display_name: NVIDIA When2Call
+    organization: NVIDIA
+    hf_id: nvidia/When2Call
+    repository: null
+    papers: [when2call]
+    exact_revision: null
+    retrieval_date: null
+    license: UNKNOWN_PENDING_VERIFICATION
+    redistribution: NOT_ASSESSED
+    original_sample_count: null
+    retained_sample_count: null
+    preprocessing_version: null
+    checksum: null
+    category: tool_use
+    intended_stages: [future_sft, future_preference, evaluation] 
+    allowed_splits: [train]
+    forbidden_splits: [preference, mcq_test, llm_judge_test]
+    benchmark_overlap_risk: HIGH_IF_TEST_LEAKS
+    known_source_overlap: UNKNOWN_PENDING_AUDIT
+    contamination_status: UNASSESSED
+    planned_initial_mixture_percent: 15
+    notes: Preserve split semantics; preference/test portions are not SFT data.
+  - id: toolace
+    display_name: ToolACE
+    organization: Team-ACE
+    hf_id: Team-ACE/ToolACE
+    repository: null
+    papers: [toolace]
+    exact_revision: null
+    retrieval_date: null
+    license: UNKNOWN_PENDING_VERIFICATION
+    redistribution: NOT_ASSESSED
+    original_sample_count: null
+    retained_sample_count: null
+    preprocessing_version: null
+    checksum: null
+    category: tool_use
+    intended_stages: [future_sft]
+    allowed_splits: []
+    forbidden_splits: []
+    benchmark_overlap_risk: UNKNOWN_PENDING_AUDIT
+    known_source_overlap: UNKNOWN_PENDING_AUDIT
+    contamination_status: UNASSESSED
+    planned_initial_mixture_percent: 15
+    notes: Complex schemas, candidate tools, parallel/dependent calls, and negatives.
+  - id: button
+    display_name: BUTTON / BUTTONInstruct
+    organization: PKU-Baichuan-MLSystemLab
+    hf_id: null
+    repository: https://github.com/PKU-Baichuan-MLSystemLab/BUTTON
+    papers: [button]
+    exact_revision: null
+    retrieval_date: null
+    license: UNKNOWN_PENDING_VERIFICATION
+    redistribution: NOT_ASSESSED
+    original_sample_count: null
+    retained_sample_count: null
+    preprocessing_version: null
+    checksum: null
+    category: tool_use
+    intended_stages: [future_sft]
+    allowed_splits: []
+    forbidden_splits: []
+    benchmark_overlap_risk: UNKNOWN_PENDING_AUDIT
+    known_source_overlap: UNKNOWN_PENDING_AUDIT
+    contamination_status: UNASSESSED
+    planned_initial_mixture_percent: 10
+    notes: Multi-turn compositional trajectories; do not expose source reasoning blindly.
+  - id: looptool-23k
+    display_name: LoopTool-23k
+    organization: zhangkangning
+    hf_id: zhangkangning/LoopTool-23k
+    repository: null
+    papers: [looptool]
+    exact_revision: null
+    retrieval_date: null
+    license: UNKNOWN_PENDING_VERIFICATION
+    redistribution: NOT_ASSESSED
+    original_sample_count: null
+    retained_sample_count: null
+    preprocessing_version: null
+    checksum: null
+    category: tool_use
+    intended_stages: [future_sft]
+    allowed_splits: []
+    forbidden_splits: []
+    benchmark_overlap_risk: UNKNOWN_PENDING_AUDIT
+    known_source_overlap: POSSIBLE_DERIVATION_OVERLAP
+    contamination_status: UNASSESSED
+    planned_initial_mixture_percent: 15
+    notes: Deduplication and source-lineage audit required.
+  - id: glaive-function-calling-v2
+    display_name: Glaive Function Calling v2
+    organization: glaiveai
+    hf_id: glaiveai/glaive-function-calling-v2
+    repository: null
+    papers: []
+    exact_revision: null
+    retrieval_date: null
+    license: UNKNOWN_PENDING_VERIFICATION
+    redistribution: NOT_ASSESSED
+    original_sample_count: null
+    retained_sample_count: null
+    preprocessing_version: null
+    checksum: null
+    category: tool_use
+    intended_stages: [future_sft]
+    allowed_splits: []
+    forbidden_splits: []
+    benchmark_overlap_risk: HIGH_IF_BENCHMARK_LIKE
+    known_source_overlap: UNKNOWN_PENDING_AUDIT
+    contamination_status: UNASSESSED
+    planned_initial_mixture_percent: 10
+    notes: Requires quality filtering; 30k retained examples is a hypothesis, not a hardcode.
+  - id: apigen-mt-5k
+    display_name: APIGen-MT-5k
+    organization: Salesforce
+    hf_id: Salesforce/APIGen-MT-5k
+    repository: null
+    papers: [apigen]
+    exact_revision: null
+    retrieval_date: null
+    license: UNKNOWN_PENDING_VERIFICATION
+    redistribution: NOT_ASSESSED
+    original_sample_count: null
+    retained_sample_count: null
+    preprocessing_version: null
+    checksum: null
+    category: tool_use
+    intended_stages: [future_contaminated_experiment_only]
+    allowed_splits: []
+    forbidden_splits: [clean_default]
+    benchmark_overlap_risk: HIGH_TAU_TAU2
+    known_source_overlap: POSSIBLE_TAU_BENCH_OVERLAP
+    contamination_status: EXCLUDED_FROM_CLEAN_DEFAULT
+    planned_initial_mixture_percent: 0
+    notes: If used, namespace as contaminated/apigen-mt; scores are not clean generalization.

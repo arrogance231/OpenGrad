@@ -1,0 +1,40 @@
+[project]
+name = "opengrad"
+version = "0.1.0"
+description = "Reproducible research infrastructure for capability-efficiency studies of small open-weight language models."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "License not selected; see NOTICE" }
+authors = [{ name = "OpenGrad contributors" }]
+dependencies = []
+
+[project.optional-dependencies]
+research = ["pyyaml>=6.0"]
+data = ["datasets>=2.20"]
+evaluation = ["jsonschema>=4.23"]
+training = ["torch", "transformers", "trl", "peft"]
+inference = ["llama-cpp-python"]
+dev = ["pytest>=8.0", "ruff>=0.6", "mypy>=1.11", "pyyaml>=6.0", "jsonschema>=4.23"]
+
+[project.scripts]
+opengrad-validate = "opengrad.registry.validate:main"
+opengrad-contamination = "opengrad.contamination.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/opengrad"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true

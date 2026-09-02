@@ -1,0 +1,49 @@
+# OpenGrad Phase 0 Bootstrap Report
+
+## 1. What was created
+
+A model-agnostic Python package, registries, JSON Schema experiment contract, canonical tool-conversation types, source-adapter fixtures, contamination fixture scanner, provenance records, optional integration boundaries, documentation, templates, CI, and tests.
+
+## 2. Repository tree
+
+See `docs/architecture/repository.md` for the maintained map.
+
+## 3. Design decisions
+
+Canonical tool conversations are separated from model-native renderers. Training methods are interfaces/configuration namespaces only. Run records preserve failed and rejected work. Large artifacts are ignored rather than committed.
+
+## 4. Dataset registry status
+
+All six requested primary tool-calling sources and APIGen-MT-5k are registered. Counts, licenses, revisions, hashes, and retained counts remain explicitly pending authoritative retrieval/audit; no corpus was downloaded.
+
+## 5. Benchmark registry status
+
+BFCL V4, When2Call, tau-bench/tau2, ToolSandbox, MCPMark Verified, Toolathlon, and regression slots are registered with version/commit fields left pending where unverified. No scores exist.
+
+## 6. Paper/research infrastructure
+
+`docs/references/papers.yaml` contains supplied identifiers and verification status. Web scholarly search was unavailable in this environment because Firecrawl credentials were not configured, so unknown metadata is not fabricated.
+
+## 7. OpenPapers
+
+Optional workflow documented in `docs/research/OPENPAPERS.md`; no runtime dependency or secrets.
+
+## 8. OpenWeights
+
+Documentation and interoperability result schema are present under `docs/openweights/` and `integrations/openweights/`; OpenWeights was not modified.
+
+## 9. Tests executed
+
+Verified from the final checkout: `uv run ruff check .` passed; `uv run ruff format --check .` passed (66 files); `uv run pytest` passed (4 tests); `uv run opengrad-validate` passed; `uv run mypy src` passed; and `git diff --check` passed.
+
+## 10. Known limitations
+
+No live scholarly verification, dataset download, benchmark execution, GPU/device check, training, export, or speculative decoding was performed. Project license selection remains a maintainer decision.
+
+## 11. Prerequisites for first experiment
+
+Select a license; resolve dataset licenses/revisions; audit and hash source manifests; select baseline models and native protocols; freeze evaluator versions; define hardware/software capture; approve a baseline-only Phase 1 task.
+
+## 12. Recommended next research action
+
+After explicit authorization for Phase 1, reproduce a frozen, untouched baseline on a credentialed evaluation environment before preparing any training mixture.

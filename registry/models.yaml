@@ -2,8 +2,8 @@ schema_version: 2
 models:
 - id: qwen3.5-2b
   family: Qwen
-  hf_repo: null
-  revision: null
+  hf_repo: Qwen/Qwen3.5-2B
+  revision: 15852e8c16360a2fea060d615a32b45270f8a8fc
   parameters: ~2B (planned identifier; verify before Phase 1)
   architecture: null
   context_length: null
@@ -12,7 +12,10 @@ models:
   tool_protocol: native Qwen protocol; runtime validation required
   native_tool_parser: null
   multimodal: null
-  license: null
+  license:
+    value: Apache-2.0
+    verified: true
+    source: https://huggingface.co/Qwen/Qwen3.5-2B/blob/main/LICENSE
   preferred_precision: null
   known_runtimes:
   - transformers
@@ -22,5 +25,5 @@ models:
   mobile_candidate: true
   teacher_candidate: false
   student_candidate: true
-  notes: PLANNED_ONLY. Exact Hugging Face repository and revision must be resolved
-    before Phase 1; no model is downloaded in Phase 0.5.
+  notes: PLANNED_ONLY. Revision is the Hugging Face snapshot resolved on 2026-09-02;
+    no model is downloaded in Phase 0.5.

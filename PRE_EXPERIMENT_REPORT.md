@@ -26,7 +26,7 @@ Synthetic tests cover normalized exact hashes, canonical JSON signatures, n-gram
 
 ## 7. Experiment registry status
 
-`tool_calling/qwen35_2b/baseline` exists as `PLANNED` only. Model revision and generation settings remain placeholders until Phase 1 authorization. Lineage and scientific stage gates are unit-tested.
+`tool_calling/qwen35_2b/baseline` exists as `PLANNED` only. The intended model repository and resolved Hugging Face snapshot are pinned in the model registry and planned experiment definition. Native template/parser validation and generation settings remain Phase 1 tasks. Lineage and scientific stage gates are unit-tested.
 
 ## 8. Tests executed
 

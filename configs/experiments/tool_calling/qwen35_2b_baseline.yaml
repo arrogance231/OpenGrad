@@ -3,7 +3,7 @@ status: PLANNED
 research_question: Can a small open-weight model reliably decide when and how to use tools?
 hypothesis: Baseline behavior must be measured before any post-training intervention.
 model_id: qwen3.5-2b
-model_revision: null
+model_revision: 15852e8c16360a2fea060d615a32b45270f8a8fc
 parent_checkpoint: null
 dataset_manifest: none-baseline-evaluation
 dataset_hash: null

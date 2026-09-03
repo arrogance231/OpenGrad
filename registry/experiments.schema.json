@@ -127,7 +127,20 @@
     },
     "failure_analysis": {
       "type": "string"
-    }
+    },
+    "mixture_class": {
+      "enum": ["source_oriented", "behavior_balanced", "residual_driven"]
+    },
+    "mixture_config_revision": {"type": ["string", "null"]},
+    "source_distribution": {"type": "object"},
+    "behavior_distribution": {"type": "object"},
+    "baseline_experiment": {"type": ["string", "null"]},
+    "residual_profile_revision": {"type": ["string", "null"]},
+    "mixture_generation": {"type": "object"},
+    "contamination_report": {"type": ["string", "null"]},
+    "retention_data_proportion": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "catalogue_size_distribution": {"type": "object"},
+    "counterfactual_coverage": {"type": "object"}
   },
   "additionalProperties": true
 }

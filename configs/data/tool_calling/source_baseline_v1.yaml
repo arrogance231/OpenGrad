@@ -1,9 +1,8 @@
-config_id: tool-calling-mixture-v1
+config_id: source-baseline-v1
 schema_version: 2
 status: HYPOTHESIS_ONLY
 phase: 2
 mixture_class: source_oriented
-supersedes: source-manifest-only-v1
 source_manifests: [xlam-function-calling-60k, when2call, toolace, button, looptool-23k, glaive-function-calling-v2]
 source_weights_hypothesis: {xlam-function-calling-60k: 0.35, when2call: 0.15, toolace: 0.15, button: 0.15, looptool-23k: 0.10, glaive-function-calling-v2: 0.10}
 behavior_weights: {}
@@ -11,4 +10,3 @@ weights_are_not_final: true
 normalization: canonical_then_behavior_labels_then_model_native_renderer
 contamination_scan_required: true
 sft_excludes_evaluation_and_preference: true
-notes: Historical source-oriented hypothesis retained as M0; use balanced_policy_v1 for M1 and residual_policy_v1 for M2.

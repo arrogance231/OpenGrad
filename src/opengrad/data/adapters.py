@@ -17,17 +17,31 @@ def adapt(record: dict[str, Any], source: str, split: str = "fixture") -> ToolCo
     tools = record.get("tools", record.get("functions", []))
     if tools is None:
         tools = []
+    metadata = {
+        "split": split,
+        "source": {
+            "dataset_id": source,
+            "revision": record.get("source_revision"),
+            "original_split": record.get("original_split", split),
+        },
+        "source_revision": record.get("source_revision"),
+        "contamination_status": record.get("contamination_status", "UNASSESSED"),
+        "source_fields": sorted(record),
+    }
+    for key in ("behavior", "tool_context", "interaction", "training", "counterfactual"):
+        if key in record:
+            metadata[key] = record[key]
+    if "tool_context" not in metadata:
+        metadata["tool_context"] = {"tool_count": len(tools)}
+        for key in ("relevant_tool_count", "distractor_count"):
+            if record.get(key) is not None:
+                metadata["tool_context"][key] = record[key]
     c = ToolConversation(
         str(record["id"]),
         source,
         list(tools),
         messages,
-        {
-            "split": split,
-            "source_revision": record.get("source_revision"),
-            "contamination_status": "UNASSESSED",
-            "source_fields": sorted(record),
-        },
+        metadata,
     )
     c.validate()
     return c

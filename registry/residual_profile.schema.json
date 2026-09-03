@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenGrad baseline residual profile",
+  "type": "object",
+  "required": ["model", "baseline_experiment", "sample_count", "residuals"],
+  "properties": {
+    "model": {"type": "string", "minLength": 1},
+    "baseline_experiment": {"type": "string", "minLength": 1},
+    "revision": {"type": ["string", "null"]},
+    "sample_count": {"type": "integer", "minimum": 1},
+    "source_evaluation": {"type": ["string", "null"]},
+    "confidence": {"type": ["string", "null"]},
+    "metrics": {"type": "object"},
+    "confusion_matrix": {"type": "object"},
+    "residuals": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}}
+  },
+  "additionalProperties": false
+}

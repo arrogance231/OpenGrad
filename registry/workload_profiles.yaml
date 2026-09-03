@@ -1,0 +1,13 @@
+schema_version: 1
+profiles:
+  - id: mobile-agent-v1
+    status: PLANNED
+    provenance: Motivated by OpenWeights deployment observations; percentages require measurement.
+    prompt:
+      system_prompt: long
+      tool_catalogue: variable
+      history: multi_turn
+    decode:
+      typical_response: short_to_medium
+    content_classes: [conversation, reasoning, tool_decision, structured_call, json_arguments, tool_observation, short_answer, long_answer, code]
+    metrics: [prefill_latency, kv_cache_usage, decode_latency, policy_accuracy]

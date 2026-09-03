@@ -1,25 +1,53 @@
-from collections import defaultdict
+from pathlib import Path
 from typing import Any
+
+import yaml  # type: ignore[import-untyped]
+
+from opengrad.data.behavior import capability_ids, validate_weights
+from opengrad.data.stats import analyze as _analyze
+
+MIXTURE_CLASSES = frozenset({"source_oriented", "behavior_balanced", "residual_driven"})
 
 
 def analyze(
     records: list[dict[str, Any]], weights: dict[str, float] | None = None
 ) -> dict[str, Any]:
-    sample_counts: defaultdict[str, int] = defaultdict(int)
-    token_counts: defaultdict[str, int] = defaultdict(int)
-    for record in records:
-        source = str(record.get("source", "unknown"))
-        sample_counts[source] += 1
-        token_counts[source] += int(record.get("token_count", 0))
-    return {
-        "sample_counts": dict(sample_counts),
-        "token_counts": dict(token_counts),
-        "requested_weights": weights or {},
-        "sample_share": _shares(sample_counts),
-        "token_share": _shares(token_counts),
-    }
+    return _analyze(records, weights)
 
 
-def _shares(values: dict[str, int]) -> dict[str, float]:
-    total = sum(values.values())
-    return {key: value / total for key, value in values.items()} if total else {}
+def load_mixture(path: Path | str) -> dict[str, Any]:
+    value = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(value, dict):
+        raise TypeError("mixture config must be a mapping")
+    validate_mixture(value)
+    return value
+
+
+def validate_mixture(config: dict[str, Any], known_sources: set[str] | None = None) -> None:
+    mixture_class = config.get("mixture_class")
+    if mixture_class not in MIXTURE_CLASSES:
+        raise ValueError(f"invalid mixture_class: {mixture_class}")
+    if config.get("status") not in {"HYPOTHESIS_ONLY", "SCHEMA_READY", "MATERIALIZED"}:
+        raise ValueError("invalid mixture status")
+    if mixture_class == "residual_driven" and not config.get("baseline_experiment"):
+        raise ValueError("residual-driven mixture requires baseline_experiment")
+    if known_sources is not None:
+        sources = config.get("source_manifests", [])
+        unknown = set(sources) - known_sources
+        if unknown:
+            raise ValueError(f"unknown dataset source: {sorted(unknown)}")
+    for key in ("source_weights", "behavior_weights"):
+        weights = config.get(key)
+        if weights and isinstance(weights, dict):
+            validate_weights(weights, set(weights) if key == "source_weights" else capability_ids())
+
+
+def select_by_behavior(records: list[dict[str, Any]], behavior: str) -> list[dict[str, Any]]:
+    return [
+        record
+        for record in records
+        if behavior
+        in record.get("behavior", record.get("metadata", {}).get("behavior", {})).get(
+            "capabilities", []
+        )
+    ]

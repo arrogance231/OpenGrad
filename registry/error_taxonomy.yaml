@@ -1,4 +1,20 @@
-schema_version: 1
+schema_version: 2
+failure_taxonomy:
+  UNDER_CALL: Missed a required tool action.
+  OVER_CALL: Called a tool when a direct answer or no action was appropriate.
+  WRONG_TOOL: Selected a semantically incorrect tool.
+  INVALID_ARGUMENTS: Produced schema-invalid or type-invalid arguments.
+  UNGROUNDED_ARGUMENTS: Invented or insufficiently grounded argument values.
+  MISSING_CLARIFICATION: Acted without resolving required ambiguity or missing input.
+  FALSE_UNSUPPORTED: Declared a supported request unsupported.
+  UNSUPPORTED_TOOL_CALL: Called a tool that is unavailable or unsupported.
+  BAD_DEPENDENCY_ORDER: Violated a dependency between tool calls.
+  BAD_PARALLELIZATION: Serialized or parallelized calls incorrectly.
+  OBSERVATION_IGNORED: Failed to use a relevant tool observation.
+  PREMATURE_STOP: Stopped before the task was complete.
+  FAILURE_RECOVERY_ERROR: Recovered incorrectly from a tool failure.
+  MULTI_TURN_STATE_ERROR: Lost relevant state across turns.
+  FORMAT_ERROR: Violated the required tool-call protocol format.
 taxonomies:
   tool_use:
     E01: unnecessary_tool_call

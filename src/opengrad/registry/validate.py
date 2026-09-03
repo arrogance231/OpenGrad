@@ -13,19 +13,59 @@ def load_yaml(path: Path) -> Any:
 
 def validate(root: Path) -> list[str]:
     errors = []
+    dataset_ids: set[str] = set()
     for name in (
         "datasets.yaml",
         "benchmarks.yaml",
         "models.yaml",
         "runtimes.yaml",
         "hardware.yaml",
+        "workload_profiles.yaml",
     ):
         try:
             value = load_yaml(root / "registry" / name)
             if not isinstance(value, dict) or "schema_version" not in value:
                 errors.append(name + ": missing schema_version")
+            if name == "datasets.yaml" and isinstance(value, dict):
+                dataset_ids = {
+                    str(item["id"])
+                    for item in value.get("datasets", [])
+                    if isinstance(item, dict) and "id" in item
+                }
         except (ImportError, OSError, TypeError, ValueError) as exc:
             errors.append(f"{name}: {exc}")
+    try:
+        taxonomy = load_yaml(root / "registry/tool_behaviors.yaml")
+        if (
+            not isinstance(taxonomy, dict)
+            or not taxonomy.get("decisions")
+            or not taxonomy.get("capabilities")
+        ):
+            errors.append("tool_behaviors.yaml: decisions and capabilities are required")
+        elif any(
+            not isinstance(value, str) or not value for value in taxonomy["capabilities"].values()
+        ):
+            errors.append("tool_behaviors.yaml: every capability needs a description")
+    except (ImportError, OSError, TypeError, ValueError) as exc:
+        errors.append(f"tool_behaviors.yaml: {exc}")
+    try:
+        from opengrad.data.mixture import load_mixture
+
+        for path in sorted((root / "configs/data/tool_calling").glob("*.yaml")):
+            try:
+                # The legacy contamination config is intentionally not a mixture.
+                if path.name != "contamination.yaml":
+                    value = load_yaml(path)
+                    load_mixture(path)
+                    sources = (
+                        set(value.get("source_manifests", [])) if isinstance(value, dict) else set()
+                    )
+                    if sources - dataset_ids:
+                        errors.append(f"{path.name}: unknown source manifest")
+            except (OSError, TypeError, ValueError) as exc:
+                errors.append(f"{path.name}: {exc}")
+    except (ImportError, OSError, TypeError, ValueError) as exc:
+        errors.append(f"mixture configs: {exc}")
     try:
         schema = json.loads((root / "registry/experiments.schema.json").read_text())
         if schema.get("$schema") is None:

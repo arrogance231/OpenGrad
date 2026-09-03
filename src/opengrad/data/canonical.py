@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Any
 
+from opengrad.data.behavior import validate_behavior
+
 ROLES = {"system", "user", "assistant", "tool"}
 
 
@@ -19,6 +21,30 @@ class ToolConversation:
             raise TypeError("tools and messages must be lists")
         if not self.metadata.get("split"):
             raise ValueError("metadata.split is required for provenance")
+        behavior = self.metadata.get("behavior")
+        if behavior is not None:
+            if not isinstance(behavior, dict):
+                raise TypeError("metadata.behavior must be an object")
+            validate_behavior(
+                behavior.get("decision", ""),
+                behavior.get("capabilities", []),
+                behavior.get("confidence", "known"),
+            )
+        tool_context = self.metadata.get("tool_context")
+        if tool_context is not None:
+            if not isinstance(tool_context, dict):
+                raise TypeError("metadata.tool_context must be an object")
+            for key in ("tool_count", "relevant_tool_count", "distractor_count"):
+                if key in tool_context and (
+                    not isinstance(tool_context[key], int) or tool_context[key] < 0
+                ):
+                    raise ValueError(f"{key} must be a non-negative integer")
+        counterfactual = self.metadata.get("counterfactual")
+        if counterfactual is not None:
+            if not isinstance(counterfactual, dict) or not counterfactual.get("group_id"):
+                raise ValueError("counterfactual requires group_id")
+            if not counterfactual.get("variant") or not counterfactual.get("changed_factor"):
+                raise ValueError("counterfactual requires variant and changed_factor")
         tool_names = set()
         for tool in self.tools:
             if not isinstance(tool, dict) or not isinstance(tool.get("name"), str):

@@ -115,8 +115,8 @@ The roadmap is a decision process, not a mandatory recipe. Preference optimizati
 
 ```mermaid
 flowchart TD
-    A[Base model] --> B[Baseline reproduction]
-    B --> C[Dataset audit and contamination analysis]
+    A[Base model] --> B[Fixed baseline reproduction]
+    B --> C[Behavioral dataset audit and contamination analysis]
     C --> D[Controlled SFT]
     D --> E[Full evaluation]
     E --> F[Failure and regression diagnosis]
@@ -148,7 +148,7 @@ flowchart TD
 
 ## Dataset program
 
-The dataset registry records source identity, revisions, intended stages, split restrictions, contamination risk, and processing state. Fixture adapters are implemented for the six planned tool-use sources below; full corpora have not been downloaded or materialized.
+The dataset registry records source identity, revisions, intended stages, split restrictions, contamination risk, and processing state. Fixture adapters are implemented for the six planned tool-use sources below; full corpora have not been downloaded or materialized. OpenGrad now preserves two axes: where an example came from (source provenance) and what it trains (behavioral capability). Datasets are sources of evidence, not capabilities by themselves.
 
 | Dataset | Purpose in the program | Current support | Training eligibility | Provenance |
 | --- | --- | --- | --- | --- |
@@ -166,7 +166,7 @@ adapter implemented ≠ fixture validated ≠ metadata validated
 metadata validated ≠ full dataset materialized ≠ used in an experiment
 ```
 
-The proposed [`tool-calling-mixture-v1`](configs/data/tool_calling/mixture_v1.yaml) is a hypothesis only. Materialization must preserve source metadata and terms, verify checksums, normalize to the canonical schema, deduplicate, scan contamination, filter, and freeze a version before training ([protocol](docs/data/DATASET_MATERIALIZATION_PROTOCOL.md)). Evaluation-only and preference-only data must not leak into ordinary SFT.
+The historical [`tool-calling-mixture-v1`](configs/data/tool_calling/mixture_v1.yaml) is retained as M0, a source-oriented control hypothesis. M1 is the behaviorally balanced [`balanced_policy_v1`](configs/data/tool_calling/balanced_policy_v1.yaml); M2 is the baseline-dependent, schema-ready [`residual_policy_v1`](configs/data/tool_calling/residual_policy_v1.yaml). None has been materialized. See the [tool-use mixture methodology](docs/data/tool-use-mixture-methodology.md) and [behavior matrix](docs/data/training-behavior-matrix.md). Materialization must preserve source metadata and terms, verify checksums, normalize, label, deduplicate, scan contamination, filter, and freeze a version before training ([protocol](docs/data/DATASET_MATERIALIZATION_PROTOCOL.md)).
 
 `Salesforce/APIGen-MT-5k` is explicitly excluded from the clean default because of possible τ-bench/τ² overlap. If it is ever used, it must use the contaminated namespace and its scores cannot be presented as clean generalization ([contamination configuration](configs/data/tool_calling/contamination.yaml)).
 

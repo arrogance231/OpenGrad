@@ -1,0 +1,46 @@
+schema_version: 1
+id: tool-use-behavior-taxonomy-v1
+status: CANONICAL
+uncertainty_states: [known, derived, heuristic, unknown]
+decisions:
+  CALL: Use a tool because the request requires an available external capability or fresh information.
+  ANSWER: Respond directly without a tool; this includes controlled direct-answer retention examples.
+  CLARIFY: Ask for missing or ambiguous information before acting.
+  UNSUPPORTED: Decline because no available tool or safe capability can satisfy the request.
+capabilities:
+  must_call: The request requires a tool call.
+  must_not_call: A tool call is unnecessary or inappropriate.
+  clarify_before_call: Missing or ambiguous information must be resolved first.
+  unsupported_request: The request cannot be satisfied by the available tools.
+  single_tool_selection: Select the one correct tool.
+  near_match_distractor: Reject a plausible but semantically incorrect tool.
+  irrelevant_tool_rejection: Ignore tools unrelated to the request.
+  unavailable_tool_rejection: Do not call a named or implied unavailable tool.
+  multiple_plausible_tools: Resolve or clarify among several plausible tools.
+  argument_grounding: Derive arguments only from the request and trusted context.
+  required_argument_present: Supply a required argument that is present.
+  missing_required_argument: Detect a missing required argument.
+  argument_type_correctness: Match the declared argument type.
+  argument_value_correctness: Use the requested argument value.
+  no_argument_hallucination: Do not invent absent argument values.
+  single_call: Use one tool call when one suffices.
+  parallel_calls: Issue independent calls in parallel.
+  sequential_calls: Make dependent calls in sequence.
+  dependency_ordering: Respect dependencies between calls.
+  consume_tool_result: Use an observation in the next decision.
+  followup_after_observation: Continue when the observation requires action.
+  tool_result_grounding: Keep the response grounded in the observation.
+  stop_after_sufficient_observation: Stop when the observation resolves the task.
+  tool_error_recovery: Respond appropriately to a failed tool.
+  retry_when_appropriate: Retry a transient or correctable failure.
+  do_not_retry_when_inappropriate: Avoid unsafe or pointless retries.
+  fallback: Use a documented alternative after failure.
+  graceful_failure: Explain inability without fabricating success.
+  state_tracking: Preserve task state across turns.
+  reference_resolution: Resolve references using conversation context.
+  tool_state_carryover: Carry relevant tool state across turns.
+  conversation_context: Use relevant prior conversation context.
+  ordinary_instruction_following: Follow ordinary non-tool instructions.
+  direct_answer_retention: Retain direct-answer capability.
+  irrelevant_tool_resistance: Resist irrelevant available tools.
+  tool_trigger_keyword_resistance: Do not call merely because trigger words appear.

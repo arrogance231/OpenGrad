@@ -49,3 +49,7 @@ Further primary-source reading for unresolved STAR/Toolathlon identities, exact 
 READY_FOR_PHASE_1
 
 This means the repository preflight and CPU validation infrastructure pass. It does not authorize Phase 1 or begin any model work. Phase 1 still requires explicit authorization and must follow `docs/experiments/BASELINE_REPRODUCTION_PROTOCOL.md`.
+
+## Methodology revision addendum
+
+This historical report describes the prior source-adapter/bootstrap state. The subsequent methodology revision preserves that provenance work but adds a dual-axis behavioral model, M0/M1/M2 mixture classes, deterministic residual-to-mixture infrastructure, and coverage auditing. It does not retroactively claim that historical source proportions were behaviorally measured. See `docs/data/tool-use-mixture-methodology.md`.

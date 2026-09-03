@@ -1,0 +1,22 @@
+experiment_family: tool_use_policy_ablation_v1
+status: PLANNED
+research_question: Does behavioral and residual-driven dataset composition improve reliable tool-use policy over generic source mixing?
+base_experiment: tool_calling/qwen35_2b/baseline
+interventions:
+  - id: m0
+    mixture_config: configs/data/tool_calling/source_baseline_v1.yaml
+    mixture_class: source_oriented
+  - id: m1
+    mixture_config: configs/data/tool_calling/balanced_policy_v1.yaml
+    mixture_class: behavior_balanced
+  - id: m2
+    mixture_config: configs/data/tool_calling/residual_policy_v1.yaml
+    mixture_class: residual_driven
+    requires: baseline_residual_profile
+controls:
+  identical_base_checkpoint: true
+  matched_training_tokens: where_feasible
+  optimizer_family: record_per_run
+  evaluation_suite: same_held_out_suite_for_all
+  sampling_settings: record_per_run
+results: NOT_AVAILABLE

@@ -13,6 +13,8 @@ def validate_config(
         errors.append("seed is required")
     if config.get("training_stage") not in {"sft", "preference", "distillation", "rl"}:
         errors.append("invalid training stage")
+    if config.get("mixture_class") == "residual_driven" and not config.get("baseline_experiment"):
+        errors.append("residual-driven mixture requires a baseline experiment")
     for ds in config.get("dataset_splits", []):
         if ds in {"when2call:test", "when2call:mcq", "when2call:llm_judge", "when2call:preference"}:
             errors.append("evaluation/preference split forbidden in SFT")

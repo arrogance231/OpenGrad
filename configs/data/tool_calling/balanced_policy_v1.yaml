@@ -1,0 +1,24 @@
+config_id: balanced-policy-v1
+schema_version: 2
+status: HYPOTHESIS_ONLY
+phase: 2
+mixture_class: behavior_balanced
+source_manifests: [xlam-function-calling-60k, when2call, toolace, button, looptool-23k, glaive-function-calling-v2]
+source_weights: {}
+behavior_weights:
+  must_call: 0.16
+  must_not_call: 0.16
+  clarify_before_call: 0.10
+  unsupported_request: 0.08
+  single_tool_selection: 0.10
+  argument_grounding: 0.10
+  consume_tool_result: 0.08
+  parallel_calls: 0.06
+  dependency_ordering: 0.06
+  tool_error_recovery: 0.05
+  direct_answer_retention: 0.05
+weights_are_not_final: true
+label_uncertainty_allowed: [known, derived, heuristic]
+normalization: canonical_then_behavior_labels_then_model_native_renderer
+contamination_scan_required: true
+sft_excludes_evaluation_and_preference: true

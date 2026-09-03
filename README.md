@@ -1,42 +1,338 @@
 <div align="center">
 
-<img src="assets/opengrad-icon.png" alt="OpenGrad icon" width="180" />
+<img src="assets/opengrad-icon.png" alt="OpenGrad icon" width="160" />
 
 # OpenGrad
 
-**Empirical research on capability–efficiency tradeoffs in small open-weight language models.**
+**Every gradient is a hypothesis. Every checkpoint is evidence.**
 
-[![License](https://img.shields.io/badge/license-Apache--2.0-052B42?style=flat-square)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.11%2B-052B42?style=flat-square)](pyproject.toml)
+Open empirical research on capability–efficiency tradeoffs in small open-weight language models.
+
 [![CI](https://github.com/arrogance231/OpenGrad/actions/workflows/ci.yml/badge.svg)](https://github.com/arrogance231/OpenGrad/actions/workflows/ci.yml)
-[![Status](https://img.shields.io/badge/status-Phase%200.5-052B42?style=flat-square)](PRE_EXPERIMENT_REPORT.md)
+[![Python](https://img.shields.io/badge/python-3.11%2B-052B42?style=flat-square)](pyproject.toml)
+[![License](https://img.shields.io/badge/license-Apache--2.0-052B42?style=flat-square)](LICENSE)
+[![Research status](https://img.shields.io/badge/research-Phase%200.5%20%7C%20no%20scores-052B42?style=flat-square)](PRE_EXPERIMENT_REPORT.md)
 
 </div>
 
-OpenGrad is an open research repository for measuring capability–efficiency tradeoffs in post-trained small open-weight language models.
+OpenGrad studies how much capability can be extracted from small open-weight language models through controlled post-training, and how much inference efficiency can subsequently be gained without unacceptable capability regression.
 
-The project treats model changes as experiments, not as presumed improvements. Each result should preserve the model and dataset revisions, benchmark versions, hardware and software environment, regressions, failure analysis, and reproduction evidence.
+Model changes are hypotheses, not improvements. Every intervention is measured. Every regression matters. Failed experiments remain part of the record, and every reported result must be reproducible.
 
-> **Current status:** Phase 0.5 — CPU-only pre-experiment validation. No OpenGrad training, model inference, benchmark evaluation, or published research results exist yet.
+> **Current state:** the repository has validated CPU-safe research infrastructure, registries, schemas, fixtures, adapters, mock evaluation harnesses, and future experiment protocols. It has **no trained OpenGrad model, model inference run, real benchmark score, inference benchmark, speculative-decoding experiment, or published empirical result**. See the [Phase 0.5 report](PRE_EXPERIMENT_REPORT.md).
 
-## Research tracks
+## At a glance
 
-### Capability and post-training
+| Question | Current answer |
+| --- | --- |
+| What is being studied? | Capability–efficiency tradeoffs in small open-weight models. |
+| What is the first study? | Reliable tool use, beginning with a planned Qwen3.5-2B baseline. |
+| What happens after the baseline? | Controlled SFT, diagnosis, conditional preference optimization, distillation, replication, and later systems studies. |
+| How is improvement judged? | Capability, regression, reliability, efficiency, cost, and reproducibility—not one headline score. |
+| Are failures publishable? | Yes. Failed, null, rejected, and non-reproducible runs are evidence. |
+| Are results available now? | No empirical OpenGrad result exists yet. |
 
-The first planned study concerns reliable tool use in small models:
+## Why OpenGrad?
 
-- deciding when to call a tool, answer directly, clarify, or report that a request is unsupported;
-- selecting tools and producing valid, grounded arguments;
-- handling parallel calls, sequential dependencies, observations, failures, and multi-turn state;
-- measuring ordinary instruction-following regressions alongside tool-use performance.
+Small open-weight models can run locally, reduce inference cost and latency, operate on constrained hardware, and make direct model research more reproducible. They also make tradeoffs impossible to ignore:
 
-### Inference and systems efficiency
+```text
+tool accuracy       ↑    general instruction following ↓
+throughput          ↑    quality                       ↓
+quantized size      ↓    reasoning/tool reliability   ↓
+specialization      ↑    out-of-domain capability      ↓
+```
 
-OpenGrad's primary systems focus is research on faster generation: speculative decoding, native multi-token prediction (MTP) heads, external draft/target pairs, and architecture-aware decoding methods. **[OpenWeights](https://github.com/alpharomercoma/openweights)** is the downstream execution environment for compatible checkpoints, including GGUF/llama.cpp and ExecuTorch `.pte` deployment on practical devices. OpenGrad supplies the experimental methods, model-side changes, provenance, and evaluation definitions; OpenWeights handles device-side execution and measurements. Capability and efficiency are evaluated separately before they are considered jointly.
+A recipe is not better merely because one metric increases. OpenGrad evaluates whether an intervention improves the intended behavior while preserving general capability, reliability, efficiency, cost, and reproducibility.
 
-OpenGrad is model-agnostic. Model-family adapters are designed for Qwen, LFM, Gemma, Llama, Phi, SmolLM, and future small open-weight models without imposing one universal tool protocol.
+## From deployment problems to research questions
 
-## Quick start
+OpenGrad did not choose tool calling and inference efficiency arbitrarily. Its initial questions were motivated by practical deployment findings from [OpenWeights](https://github.com/alpharomercoma/openweights), an independent open-source Android project developed by `alpharomercoma`. OpenWeights runs open-weight Hugging Face models locally on constrained consumer hardware, primarily through llama.cpp/GGUF, with an additional ExecuTorch runtime.
+
+OpenWeights exposed two problems that conventional model capability claims can hide:
+
+- **Tool support is not reliable tool-use policy.** A model can emit valid call syntax and still under-call when external information is needed, over-call for facts it should answer directly, select based on tool ordering, fail to ask for missing information, or behave differently across model families.
+- **Model fit is not interactive efficiency.** Large system prompts, tool definitions, conversation history, observations, multiple inference passes, KV-cache behavior, CPU/GPU choice, memory pressure, and thermal state all affect whether an agent is useful on a phone.
+
+These are observations from OpenWeights, not OpenGrad results. OpenGrad turns them into controlled questions about the weights, then plans to return validated checkpoints to constrained downstream evaluation. The detailed provenance and scoped measurements are in [From deployment problems to research questions](docs/research/motivation.md).
+
+```mermaid
+flowchart LR
+    OW1["OpenWeights<br/>On-device deployment"] --> OBS["Measured limitation"]
+    OBS --> OG["OpenGrad<br/>Controlled model experiment"]
+    OG --> CKPT["Checkpoint +<br/>reproducible evidence"]
+    CKPT --> OW2["OpenWeights<br/>Device validation"]
+    OW2 --> OBS
+```
+
+This is the intended feedback loop. The repositories are independently maintained: OpenGrad does not own OpenWeights, and OpenWeights is not an OpenGrad subproject.
+
+## Research questions
+
+OpenGrad's program asks:
+
+### RQ1 — Reliable tool policy
+
+Can controlled post-training improve when and how small models use tools, beyond the tool syntax already present in their instruct checkpoints?
+
+### RQ2 — Transfer
+
+Do those improvements transfer from controlled evaluations into realistic agent runtimes and workload patterns such as those exposed by OpenWeights?
+
+### RQ3 — Regression
+
+What ordinary instruction-following, reasoning, calibration, latency, or robustness capabilities regress as tool reliability improves?
+
+### RQ4 — Distillation
+
+When SFT reaches its ceiling, can on-policy distillation from a larger model improve the remaining decision-boundary failures?
+
+### RQ5 — Constrained inference
+
+Can target-attached/native speculative decoding improve small-model decode efficiency without the memory and runtime cost of maintaining a separate draft model?
+
+### RQ6 — Capability × efficiency
+
+Do post-training gains survive quantization and optimized constrained-device inference?
+
+## Study 001 — Reliable Tool Use in Small Language Models
+
+The first planned track asks whether a small open-weight model can reliably decide **when and how** to use tools while retaining ordinary instruction-following capability. It is not an attempt to add tool-call grammar to a model that cannot serialize calls. It targets the decision boundary: `CALL`, `DO NOT CALL`, `ASK FIRST`, `SELECT`, `GROUND ARGUMENTS`, `CHAIN`, `PARALLELIZE`, `RECOVER`, and `STOP`.
+
+The study will cover, when the corresponding evaluation is implemented:
+
+- deciding whether to call a tool, answer directly, ask for clarification, or reject an unsupported request;
+- selecting the correct tool and producing schema-valid, grounded arguments;
+- parallel tool calls and sequential tool dependencies;
+- consuming tool observations and handling tool failure;
+- maintaining state across multi-turn tasks.
+
+The first planned baseline is [`Qwen/Qwen3.5-2B`](registry/models.yaml), recorded as `qwen3.5-2b` at an immutable planned revision in the [experiment definition](configs/experiments/tool_calling/qwen35_2b_baseline.yaml). It is **PLANNED only**. No model has been downloaded, loaded, trained, or evaluated by OpenGrad.
+
+## Experimental decision pipeline
+
+The roadmap is a decision process, not a mandatory recipe. Preference optimization is used only if diagnosis identifies a failure that such an objective is appropriate to address. Later stages require evidence from earlier stages.
+
+```mermaid
+flowchart TD
+    A[Base model] --> B[Baseline reproduction]
+    B --> C[Dataset audit and contamination analysis]
+    C --> D[Controlled SFT]
+    D --> E[Full evaluation]
+    E --> F[Failure and regression diagnosis]
+    F --> G{Is SFT sufficient?}
+    G -->|yes| H[Stop or report result]
+    G -->|no; objective justified| I[Preference optimization]
+    I --> J[On-policy distillation]
+    J --> K[Cross-model replication]
+    K --> L[Quantization and runtime study]
+    L --> M[Speculative decoding / MTP]
+```
+
+## Current research status
+
+| Stage | Status | Evidence |
+| --- | --- | --- |
+| Repository and research infrastructure | VALIDATED | [Bootstrap report](BOOTSTRAP_REPORT.md) |
+| CPU fixture and preflight validation | VALIDATED | [Phase 0.5 report](PRE_EXPERIMENT_REPORT.md) |
+| Qwen3.5-2B baseline reproduction | PLANNED | [Baseline record](configs/experiments/tool_calling/qwen35_2b_baseline.yaml) |
+| Dataset materialization and audit | PLANNED | [Materialization protocol](docs/data/DATASET_MATERIALIZATION_PROTOCOL.md) |
+| Tool-use SFT | PLANNED | [Roadmap](ROADMAP.md) |
+| Preference optimization | CONDITIONAL | Only if full evaluation justifies it |
+| On-policy distillation | PLANNED | [Roadmap](ROADMAP.md) |
+| Cross-model replication | PLANNED | [Roadmap](ROADMAP.md) |
+| Quantization and runtime evaluation | PLANNED | [Efficiency notes](docs/inference/efficiency.md) |
+| Speculative decoding / MTP | PLANNED | [Reserved configuration](configs/inference/speculative/README.md) |
+
+`VALIDATED` here means repository or fixture infrastructure passed its checks. It does not mean an ML model or real benchmark was validated. The status vocabulary used by experiment records is defined by the [experiment schema](registry/experiments.schema.json).
+
+## Dataset program
+
+The dataset registry records source identity, revisions, intended stages, split restrictions, contamination risk, and processing state. Fixture adapters are implemented for the six planned tool-use sources below; full corpora have not been downloaded or materialized.
+
+| Dataset | Purpose in the program | Current support | Training eligibility | Provenance |
+| --- | --- | --- | --- | --- |
+| [xLAM / APIGen Function Calling 60k](registry/datasets.yaml) | Function selection and argument generation | Fixture adapter; full materialization pending | Future SFT; `train` | Salesforce snapshot revision recorded in registry |
+| [When2Call](registry/datasets.yaml) | Call/no-call decisions and answer quality | Fixture adapter; split counts unresolved | Future SFT, preference, evaluation; only `train` for SFT | NVIDIA HF and GitHub sources recorded |
+| [ToolACE](registry/datasets.yaml) | Complex schemas, candidate tools, parallel/dependent calls, negatives | Fixture adapter; full materialization pending | Future SFT | Team-ACE source revision recorded |
+| [BUTTON / BUTTONInstruct](registry/datasets.yaml) | Multi-turn compositional trajectories | Fixture adapter; full materialization pending | Future SFT | Repository commit recorded |
+| [LoopTool-23k](registry/datasets.yaml) | Loop/tool trajectories requiring lineage audit | Fixture adapter; full materialization pending | Future SFT | Source revision recorded; possible derivation overlap |
+| [Glaive Function Calling v2](registry/datasets.yaml) | Additional function-calling coverage | Fixture adapter; quality filtering pending | Future SFT | HF snapshot revision recorded |
+
+These states are deliberately different:
+
+```text
+adapter implemented ≠ fixture validated ≠ metadata validated
+metadata validated ≠ full dataset materialized ≠ used in an experiment
+```
+
+The proposed [`tool-calling-mixture-v1`](configs/data/tool_calling/mixture_v1.yaml) is a hypothesis only. Materialization must preserve source metadata and terms, verify checksums, normalize to the canonical schema, deduplicate, scan contamination, filter, and freeze a version before training ([protocol](docs/data/DATASET_MATERIALIZATION_PROTOCOL.md)). Evaluation-only and preference-only data must not leak into ordinary SFT.
+
+`Salesforce/APIGen-MT-5k` is explicitly excluded from the clean default because of possible τ-bench/τ² overlap. If it is ever used, it must use the contaminated namespace and its scores cannot be presented as clean generalization ([contamination configuration](configs/data/tool_calling/contamination.yaml)).
+
+## Benchmark program
+
+OpenGrad has deterministic mock smoke harnesses for the following configured evaluation families. A smoke harness validates the local result contract with fixture predictions; it is not a real model evaluation.
+
+| Benchmark | Measures in the registry | Harness status | Real score available? | Revision state |
+| --- | --- | --- | --- | --- |
+| BFCL V4 | Function-call accuracy | Mock smoke harness | **No** | Recommended Gorilla revision pinned |
+| When2Call | Call decision, answer quality | Mock smoke harness | **No** | Evaluator revision unresolved |
+| τ-bench / τ² | Task success, reward | Mock smoke harness | **No** | Recommended repository revision pinned |
+| ToolSandbox | Tool-use correctness | Mock smoke harness | **No** | Authoritative metadata pending |
+| MCPMark Verified | Task success | Mock smoke harness | **No** | Stretch evaluation; metadata pending |
+| Toolathlon | Task success | Mock smoke harness | **No** | Stretch evaluation; metadata pending |
+
+The full benchmark registry is [`registry/benchmarks.yaml`](registry/benchmarks.yaml). The current checkout reports `BOOTSTRAP_NO_SCORES`; **no real OpenGrad benchmark score exists**.
+
+Benchmarks are measurements, not the product requirement. The intended evaluation stack is: deterministic behavior and regression checks; established external tool-use benchmarks; and downstream agent/runtime evaluation under realistic constrained-device conditions. The third layer is planned, not implemented. A benchmark gain that becomes worse in an OpenWeights-style workload is not an unqualified success.
+
+## Measurement, not leaderboard chasing
+
+### Tool-use capability
+
+The canonical schema and evaluation contracts support measurement of tool-call structure and behavior, including:
+
+- call/no-call/clarification/impossible-tool decisions;
+- tool selection and schema-valid arguments;
+- argument correctness and grounding;
+- parallel calls, sequential dependencies, and tool observations;
+- tool-failure handling and multi-turn state;
+- ordinary instruction-following and structured-output regression.
+
+The repository currently provides contracts and fixtures for these behaviors, not empirical model scores.
+
+### Systems efficiency — planned
+
+Future runtime studies may measure time to first token, prefill and decode throughput, end-to-end latency, VRAM/RAM, checkpoint size, quantization effects, speculative acceptance and accepted length, drafted/accepted tokens per step, draft/target verification cost, total model footprint, added parameters, KV-cache use, load time, output equivalence, parser/EOS/tool failures, and energy or thermal behavior where reliable instrumentation exists. The [efficiency notes](docs/inference/efficiency.md) keep this axis separate from behavioral correctness.
+
+OpenGrad uses **target-attached/native speculative decoding** to mean a speculative mechanism trained into or closely attached to the target model, such as an MTP or Medusa-style head, an architecture-permitted EAGLE-like method, a self-speculative method, or another attached mechanism. It does not mean that external draft-model speculation is inherently bad, and no approach is presumed faster. Where feasible, the comparison is ordinary autoregressive decoding versus external draft-model speculation versus target-attached/native speculation.
+
+An efficiency gain is not automatically desirable if capability or reliability falls substantially.
+
+## Capability × efficiency
+
+OpenGrad has two related but distinct directions:
+
+| Capability | Efficiency |
+| --- | --- |
+| SFT; preference optimization when justified; distillation; tool use; specialization; robustness | Quantization; speculative decoding; draft/target decoding; native MTP; architecture-aware decoding; device deployment |
+
+```text
+             Capability
+                 ↑
+                 │       desirable region
+                 │            ●
+                 │
+                 └────────────────────→ Efficiency
+```
+
+## Research architecture
+
+The repository separates declarative identity from semantics, model boundaries, and evidence:
+
+```mermaid
+flowchart TD
+    A[Source datasets] --> B[Source adapters]
+    B --> C[Canonical tool schema]
+    C --> D[Model-family renderer]
+    C --> E[Contamination audit]
+    D --> F[Training and evaluation configs]
+    F --> G[Model or checkpoint]
+    G --> H[Benchmark suite]
+    H --> I[Normalized evaluation]
+    I --> J[Experiment record]
+    J --> K[Reports, results, HF artifacts, provenance]
+```
+
+- `registry/` — dataset, benchmark, model, runtime, hardware, provenance, and experiment contracts.
+- `src/opengrad/` — canonical data, fixture adapters, parsing, contamination tools, evaluation schemas, lineage, stage gates, and reporting utilities.
+- `configs/` — data, evaluation, model, training, inference, and planned experiment configurations.
+- `experiments/`, `reports/`, `results/` — append-only namespaces for future evidence; no completed result is present.
+- `docs/` — methodology, architecture, data, benchmark, inference, reproducibility, and contribution protocols.
+- `hf/` — model-card, dataset-card, and experiment-report templates.
+
+Training and inference implementations are intentionally absent from the current bootstrap phase. Large data and checkpoints remain outside Git and must be referenced by immutable revisions and hashes.
+
+## Reproducibility and provenance
+
+An OpenGrad result should preserve, where applicable:
+
+- base model and exact model revision;
+- tokenizer revision and chat/parser configuration;
+- dataset repository, revision, split, preprocessing configuration, and hash;
+- benchmark repository, split, evaluator version, and revision;
+- seed, hyperparameters, training and runtime software;
+- hardware, driver, accelerator runtime, and compute provider;
+- checkpoint lineage, quantization, inference settings, and generated artifacts;
+- known regressions, failures, uncertainty, and limitations.
+
+Unavailable fields remain `null` or `UNKNOWN`; they are never inferred. **An untraceable score is not an OpenGrad result.** See [reproducibility](docs/research/reproducibility.md), the [experiment schema](registry/experiments.schema.json), and the [provenance schema](registry/provenance.schema.json).
+
+## Negative results are results
+
+OpenGrad retains successful runs, failed runs, regressions, null results, non-reproductions, and rejected hypotheses. This prevents duplicated failed work, exposes unstable recipes and model-family differences, makes sensitivity visible, and reduces cherry-picking. A lower score can be useful evidence if the comparison and failure analysis are reproducible.
+
+## Provenance across projects
+
+OpenGrad uses explicit labels when referring to the neighboring deployment project:
+
+```text
+Observed in OpenWeights
+Motivated by OpenWeights
+OpenGrad hypothesis
+OpenGrad planned experiment
+OpenGrad reproduced
+OpenGrad result
+```
+
+`Observed in OpenWeights` is not `OpenGrad result`. OpenGrad must independently execute and record any claimed reproduction. See the [motivation and provenance note](docs/research/motivation.md) for direct links to the OpenWeights tool-calling, first-turn latency, inference-engine, and speculative-decoding records.
+
+## Results
+
+> **No empirical OpenGrad result has been published yet.**
+
+The stable results namespace is ready for future records. The empty table is intentional.
+
+| Experiment | Model | Change | Capability Δ | Regression | Efficiency Δ | Reproduced | Report |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+
+`results/registry.jsonl` is currently empty. Do not confuse the 29 passing CPU tests reported by Phase 0.5 with ML evidence: they validate infrastructure and fixtures, not model quality.
+
+### Illustrative future record
+
+This is a schema-shaped example only; it is not a run and contains no result:
+
+```yaml
+experiment_id: example-only
+status: EXAMPLE
+
+model:
+  family: qwen
+  revision: <immutable revision>
+
+intervention:
+  type: sft
+
+data:
+  mixture: <versioned config>
+
+evaluation:
+  benchmark_revision: <commit>
+
+environment:
+  hardware: <captured>
+  software: <captured>
+
+results:
+  capability: <not-run>
+  regressions: <not-run>
+  efficiency: <not-run>
+```
+
+Use the real [experiment schema](registry/experiments.schema.json) and [experiment report template](hf/EXPERIMENT_REPORT_TEMPLATE.md) for actual records.
+
+## Development setup
 
 Requirements: Python 3.11+ and [uv](https://docs.astral.sh/uv/).
 
@@ -47,42 +343,62 @@ uv run opengrad-preflight
 uv run pytest
 ```
 
-These commands validate registries and CPU-only fixtures. They do not download models or datasets and do not require a GPU.
+These commands validate registries, capture the local environment, exercise CPU-safe fixtures, and run the test suite. They do not download models or datasets, run inference, train a model, or produce a benchmark score. The current preflight explicitly reports `GPU experiments: NOT STARTED`.
 
-## Repository layout
+## Reproducing experiments
 
-- `registry/` — versioned dataset, benchmark, model, runtime, hardware, provenance, and experiment contracts.
-- `src/opengrad/` — canonical data, adapters, parsers, contamination tooling, evaluation schemas, lineage, and reporting utilities.
-- `configs/` — model, data, evaluation, training, inference, and planned experiment configurations.
-- `docs/` — architecture, methodology, reproducibility, dataset protocols, benchmark notes, and integration boundaries.
-- `experiments/`, `reports/`, `results/` — append-only research records and report namespaces; no completed OpenGrad results are present yet.
-- `hf/` — model-card, dataset-card, and experiment-report templates.
+There is no completed experiment to reproduce yet. The future baseline workflow is specified in [`BASELINE_REPRODUCTION_PROTOCOL.md`](docs/experiments/BASELINE_REPRODUCTION_PROTOCOL.md): acquire the accelerator, fetch the exact Qwen3.5-2B revision, validate its native template/parser, run sanity checks, execute the selected baseline evaluations, compare revisions and settings, investigate discrepancies, and pass the reproduction gate. That protocol is not executed by the development commands above.
 
-## Research safeguards
+## Navigation
 
-- Source data are normalized into a canonical representation before model-specific rendering.
-- Evaluation-only and preference-only splits are excluded from clean training configurations.
-- `Salesforce/APIGen-MT-5k` is excluded from the clean default because of potential overlap with τ-bench-style tasks.
-- Failed, rejected, and negative experiments remain part of the scientific record.
-- Benchmark revisions, dataset revisions, and checkpoint lineage are recorded explicitly.
-- CI uses small synthetic fixtures and does not require credentials, large checkpoints, or accelerators.
+| I want to… | Start here |
+| --- | --- |
+| Understand the methodology | [Research methodology](docs/research/methodology.md) |
+| Reproduce an experiment | [Baseline protocol](docs/experiments/BASELINE_REPRODUCTION_PROTOCOL.md) |
+| Inspect datasets | [Dataset registry](registry/datasets.yaml) and [data protocols](docs/data/) |
+| Inspect benchmarks | [Benchmark registry](registry/benchmarks.yaml) and [benchmark notes](docs/benchmarks/README.md) |
+| Inspect model-family boundaries | [Model configs](configs/models/) and [model registry](registry/models.yaml) |
+| See experiment records | [experiments/](experiments/README.md) |
+| See results | [results/](results/registry.jsonl) |
+| See reports and failures | [reports/](reports/README.md) |
+| Add or challenge a finding | [CONTRIBUTING.md](CONTRIBUTING.md) and [contribution protocols](docs/contributing/README.md) |
+| Cite OpenGrad | [CITATION.cff](CITATION.cff) |
 
-See [the roadmap](ROADMAP.md), [the Phase 0.5 report](PRE_EXPERIMENT_REPORT.md), and [the reproducibility guide](docs/research/reproducibility.md) for details.
+## Multi-model design
+
+OpenGrad is not a Qwen repository. Qwen3.5-2B is the first planned target, not the permanent scope. Configuration namespaces reserve future work for Qwen, Gemma, Llama, Phi, SmolLM, and LFM, but those namespaces currently contain no implemented model adapters or results. The distinction matters:
+
+```text
+implemented infrastructure ≠ planned model ≠ working adapter ≠ replicated result
+```
+
+## How to challenge a result
+
+You do not need to agree with a result to contribute. Showing that it fails to reproduce is valuable research. Useful challenges include:
+
+- reproduce a finding with another seed or model family;
+- reproduce it on another GPU or consumer device;
+- challenge a dataset assumption or identify contamination;
+- identify evaluator disagreement or compare inference implementations;
+- submit a failed reproduction or negative result.
+
+Start with [CONTRIBUTING.md](CONTRIBUTING.md), the [reproduction PR guide](docs/contributing/reproduction-pr.md), and the [negative-result guide](docs/contributing/negative-result.md). Do not commit checkpoints, bulk datasets, credentials, or fabricated results.
 
 ## Related projects
 
-- [OpenPapers](https://github.com/arrogance231/openpapers) — optional literature discovery and scholarly provenance infrastructure.
-- [OpenWeights](https://github.com/alpharomercoma/openweights) — separate downstream execution environment with llama.cpp and ExecuTorch support for future practical device-side evaluation.
-- [Small-Mind Companion](https://github.com/arrogance231/small-mind-companion) and [SchemaForge](https://github.com/arrogance231/SchemaForge) — related maintainer projects, not OpenGrad results.
+- [OpenWeights](https://github.com/alpharomercoma/openweights) — downstream execution environment for compatible GGUF/llama.cpp and ExecuTorch artifacts and practical device-side measurements. OpenGrad defines experiments, evaluation, and evidence; OpenWeights runs compatible artifacts.
+- [OpenPapers](https://github.com/arrogance231/openpapers) — optional literature discovery and scholarly provenance support. Its findings are research inputs, not empirical OpenGrad results; see [the boundary documentation](docs/research/OPENPAPERS.md).
 
-## Contributing
+OpenGrad's initial research questions were motivated in part by engineering and measurements from OpenWeights, developed by `alpharomercoma`. OpenWeights provides the constrained-device environment in which practical limits of small open-weight models became visible; it remains an independent project rather than an OpenGrad component.
 
-Useful contributions include reproductions, alternative seeds, new model-family adapters, dataset audits, benchmark discrepancy reports, speculative-decoding and MTP experiments, hardware and mobile measurements, inference implementations, and negative results.
+## Roadmap
 
-Start with [CONTRIBUTING.md](CONTRIBUTING.md) and the templates under `docs/contributing/`. Contributions should include exact revisions, configuration, provenance, observed regressions, and limitations.
+The program proceeds from infrastructure to controlled measurement: [repository infrastructure](ROADMAP.md), baseline reproduction, dataset preparation and audit, controlled SFT, diagnosis, conditional preference optimization, distillation, cross-model replication, quantization/runtime studies, OpenWeights device studies, speculative decoding/MTP, and joint capability–efficiency research. A later phase is not successful without reproducible evidence and regression analysis.
 
-## License and citation
+## Citation and license
 
-OpenGrad source code and documentation are licensed under [Apache-2.0](LICENSE). Third-party datasets, models, benchmark assets, papers, and imported code retain their own terms.
+Please cite the repository using [CITATION.cff](CITATION.cff) until a formal release DOI exists. OpenGrad source code and documentation are licensed under [Apache-2.0](LICENSE). Third-party datasets, models, benchmark assets, papers, and imported code retain their own terms.
 
-See [CITATION.cff](CITATION.cff) for citation metadata. A formal release DOI has not been assigned.
+## Acknowledgements
+
+OpenGrad records upstream datasets, models, benchmarks, and papers in its registries and documentation. Those sources remain subject to their own licenses and attribution requirements.

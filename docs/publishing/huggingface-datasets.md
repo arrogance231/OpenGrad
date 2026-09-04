@@ -6,7 +6,7 @@ GitHub is the canonical home for source code, schemas, manifests, provenance, au
 
 ## Current release definition
 
-`OpenGrad ToolPolicy Canonical v1` is `CANONICAL_DATASET_PUBLISHED` at Hub commit `4d2bf3ab1cd480f04c13627c153a4cf9cf4e145f`. The public payload contains the five previously cleared sources plus 59,370 xLAM/APIGen normalized records under CC BY 4.0 with attribution and modification disclosure. The xLAM upstream access gate is not reproduced downstream. The exact publication record is `reports/releases/toolpolicy-canonical-v1-publication.json`.
+`OpenGrad ToolPolicy Canonical v1` is `CANONICAL_DATASET_PUBLISHED` at Hub commit `bb295d8a4ad64f7e8161044ad2fa34f873ede418`. The public payload contains the five previously cleared sources plus 59,370 xLAM/APIGen normalized records under CC BY 4.0 with attribution and modification disclosure. The xLAM upstream access gate is not reproduced downstream. The exact publication record is `reports/releases/toolpolicy-canonical-v1-publication.json`.
 
 The tracked release config is `configs/releases/toolpolicy_canonical_v1.yaml`. The tracked dataset-card, licensing, and citation inputs are under `release/huggingface/toolpolicy-canonical-v1/`. Generated staging output belongs under `.release/` and is ignored.
 
@@ -40,4 +40,4 @@ Future model provenance must identify the upstream source, the exact OpenGrad ca
 
 ## Upload gate
 
-Before a future release update, recheck current upstream licenses, dataset cards, repository terms, gated conditions, attribution, and citation requirements. Validate the generated manifest, Parquet payloads, card, citations, license audit, checksums, counts, and absence of evaluation/preference leakage. The v1.0.0 publication is recorded at Hub commit `4d2bf3ab1cd480f04c13627c153a4cf9cf4e145f`.
+Before a future release update, recheck current upstream licenses, dataset cards, repository terms, gated conditions, attribution, and citation requirements. Validate the generated manifest, Parquet payloads, card, citations, license audit, checksums, counts, and absence of evaluation/preference leakage. The v1.0.0 publication is recorded at Hub commit `bb295d8a4ad64f7e8161044ad2fa34f873ede418`.

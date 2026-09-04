@@ -1,35 +1,30 @@
 {
   "evaluation_rows_in_payload": 0,
-  "excluded_sources": [
-    {
-      "input_manifest_sha256": "ea15b7e9d3f28d35870e3337a8d1ed9cbc12693afe55122377c1a47b711173d3",
-      "manifest": "data/processed/normalization-v1/xlam/manifest.json",
-      "reason": "GATED_SOURCE_REVIEW_REQUIRED",
-      "source": "xlam-function-calling-60k",
-      "source_revision": "26d14ebfe18b1f7b524bd39b404b50af5dc97866"
-    }
-  ],
+  "excluded_sources": [],
   "hub_repository": "arrochi112/OpenGrad-ToolPolicy-Canonical-v1",
-  "hub_revision": "4d2bf3ab1cd480f04c13627c153a4cf9cf4e145f",
+  "hub_revision": "bb295d8a4ad64f7e8161044ad2fa34f873ede418",
   "preference_rows_in_payload": 0,
-  "published_record_count": 154581,
+  "published_record_count": 213951,
   "published_sources": {
     "button": 7941,
     "glaive-function-calling-v2": 99794,
     "looptool-23k": 20827,
     "toolace": 11190,
-    "when2call": 14829
+    "when2call": 14829,
+    "xlam-function-calling-60k": 59370
   },
-  "release_manifest_sha256": "6866034320c6850fa766000bd5ddb2d76a45280d48f05d78fedeb9ef2ba3bd73",
+  "release_manifest_sha256": "181b3fba1d722cddfab9026ffeb0ab47783398e96dac06be6b727183b017a911",
   "release_name": "OpenGrad ToolPolicy Canonical",
   "release_version": "v1.0.0",
   "verification": {
     "dataset_config": "canonical",
     "manifest_download": "PASS",
-    "parquet_shards_listed": "156",
+    "parquet_shards_listed": 216,
     "public": true,
     "repo_type": "dataset",
     "representative_stream_load": "PASS",
-    "split": "train"
+    "representative_xlam_parquet_load": "PASS",
+    "split": "train",
+    "xlam_provenance_fields": "PASS"
   }
 }

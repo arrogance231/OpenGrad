@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from opengrad.data.release import _parquet_row, validate_release
+from opengrad.data.release import _load_config, _parquet_row, validate_release
 
 
 def test_release_row_preserves_source_lineage():
@@ -36,6 +36,17 @@ def test_release_row_preserves_source_lineage():
     assert result["upstream_access_mode"] == "gated"
     assert result["downstream_access_requirement"] == "public_allowed"
     assert result["behavior_decision"] == "ANSWER"
+
+
+def test_xlam_upstream_gate_does_not_block_downstream_release():
+    config = _load_config(Path("configs/releases/toolpolicy_canonical_v1.yaml"))
+    xlam = next(
+        item for item in config["included_sources"] if item["id"] == "xlam-function-calling-60k"
+    )
+    assert xlam["upstream_access_mode"] == "gated"
+    assert xlam["redistribution_status"] == "PERMITTED_WITH_ATTRIBUTION"
+    assert xlam["downstream_access_requirement"] == "public_allowed"
+    assert config["allow_gated_sources"] is False
 
 
 def test_release_validator_fails_closed_without_manifest(tmp_path: Path):

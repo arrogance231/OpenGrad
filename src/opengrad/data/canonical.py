@@ -1,9 +1,22 @@
+from __future__ import annotations
+
+import hashlib
+import json
 from dataclasses import dataclass, field
 from typing import Any
 
 from opengrad.data.behavior import validate_behavior
 
+SCHEMA_VERSION = "tool_use_ir_v1"
 ROLES = {"system", "user", "assistant", "tool"}
+
+
+def stable_json(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+def semantic_hash(value: Any) -> str:
+    return hashlib.sha256(stable_json(value).encode("utf-8")).hexdigest()
 
 
 @dataclass(frozen=True)
@@ -13,6 +26,10 @@ class ToolConversation:
     tools: list[dict[str, Any]]
     messages: list[dict[str, Any]]
     metadata: dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def schema_version(self) -> str:
+        return SCHEMA_VERSION
 
     def validate(self) -> None:
         if not self.id or not self.source:
@@ -30,29 +47,19 @@ class ToolConversation:
                 behavior.get("capabilities", []),
                 behavior.get("confidence", "known"),
             )
-        tool_context = self.metadata.get("tool_context")
-        if tool_context is not None:
-            if not isinstance(tool_context, dict):
-                raise TypeError("metadata.tool_context must be an object")
-            for key in ("tool_count", "relevant_tool_count", "distractor_count"):
-                if key in tool_context and (
-                    not isinstance(tool_context[key], int) or tool_context[key] < 0
-                ):
-                    raise ValueError(f"{key} must be a non-negative integer")
-        counterfactual = self.metadata.get("counterfactual")
-        if counterfactual is not None:
-            if not isinstance(counterfactual, dict) or not counterfactual.get("group_id"):
-                raise ValueError("counterfactual requires group_id")
-            if not counterfactual.get("variant") or not counterfactual.get("changed_factor"):
-                raise ValueError("counterfactual requires variant and changed_factor")
-        tool_names = set()
+        names: set[str] = set()
         for tool in self.tools:
-            if not isinstance(tool, dict) or not isinstance(tool.get("name"), str):
+            if (
+                not isinstance(tool, dict)
+                or not isinstance(tool.get("name"), str)
+                or not tool["name"]
+            ):
                 raise TypeError("each tool needs a name")
-            if tool["name"] in tool_names:
+            if tool["name"] in names:
                 raise ValueError("duplicate tool name")
-            tool_names.add(tool["name"])
-        seen_calls = set()
+            names.add(tool["name"])
+        seen_calls: set[str] = set()
+        known_calls: set[str] = set()
         for index, message in enumerate(self.messages):
             if not isinstance(message, dict) or message.get("role") not in ROLES:
                 raise ValueError(f"message {index} has invalid role")
@@ -66,25 +73,85 @@ class ToolConversation:
                 for call in calls:
                     if not isinstance(call, dict) or not isinstance(call.get("name"), str):
                         raise TypeError("tool call needs name")
-                    if call["name"] not in tool_names:
+                    if call["name"] not in names:
                         raise ValueError(f"unknown tool: {call['name']}")
                     if not isinstance(call.get("arguments", {}), dict):
                         raise TypeError("tool arguments must be an object")
-                    call_id = call.get("id")
+                    call_id = call.get("id", call.get("call_id"))
                     if call_id:
                         if call_id in seen_calls:
                             raise ValueError("duplicate tool call id")
-                        seen_calls.add(call_id)
-            if role == "tool" and not isinstance(message.get("tool_call_id"), str):
-                raise ValueError("tool message needs tool_call_id")
+                        seen_calls.add(str(call_id))
+                        known_calls.add(str(call_id))
+            if role == "tool":
+                call_id = message.get("tool_call_id")
+                if not isinstance(call_id, str):
+                    raise ValueError("tool message needs tool_call_id")
+                if known_calls and call_id not in known_calls:
+                    raise ValueError(f"tool result has unknown call id: {call_id}")
+
+
+@dataclass(frozen=True)
+class CanonicalSFTExample:
+    conversation: ToolConversation
+
+    def validate(self) -> None:
+        if self.conversation.metadata.get("split") in {
+            "preference",
+            "mcq",
+            "mcq_test",
+            "llm_judge",
+            "llm_judge_test",
+        }:
+            raise ValueError("non-SFT split cannot be used as SFT")
+        self.conversation.validate()
+
+
+@dataclass(frozen=True)
+class CanonicalPreferenceExample:
+    example_id: str
+    source: dict[str, Any]
+    tools: list[dict[str, Any]]
+    context: list[dict[str, Any]]
+    chosen: dict[str, Any]
+    rejected: dict[str, Any]
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def validate(self) -> None:
+        if not self.example_id or not isinstance(self.context, list):
+            raise ValueError("preference identity and context are required")
+        if self.chosen == self.rejected:
+            raise ValueError("chosen and rejected responses must differ")
+        for response in (self.chosen, self.rejected):
+            if response.get("role") != "assistant" or "content" not in response:
+                raise ValueError("preference responses must be assistant messages")
+
+
+@dataclass(frozen=True)
+class CanonicalEvaluationExample:
+    example_id: str
+    source: dict[str, Any]
+    question: str
+    tools: list[dict[str, Any]]
+    expected_decision: str
+    candidates: dict[str, Any]
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+    def validate(self) -> None:
+        if not self.example_id or not self.question:
+            raise ValueError("evaluation identity and question are required")
+        if self.metadata.get("eligibility") != "evaluation_only":
+            raise ValueError("evaluation example must be evaluation_only")
 
 
 def canonical_dict(c: ToolConversation) -> dict[str, Any]:
     c.validate()
     return {
+        "schema_version": SCHEMA_VERSION,
         "id": c.id,
         "source": c.source,
         "tools": c.tools,
         "messages": c.messages,
         "metadata": c.metadata,
+        "canonical_hash": semantic_hash({"tools": c.tools, "messages": c.messages}),
     }

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenGrad local Hugging Face release manifest",
+  "type": "object",
+  "required": ["schema_version", "release_name", "release_version", "release_class", "opengrad_git_commit", "canonical_schema_version", "behavior_taxonomy_version", "sources", "excluded_sources", "record_count", "output_shards"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "release_name": {"type": "string", "minLength": 1},
+    "release_version": {"type": "string", "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "release_class": {"const": "PRE_TRAINING_CANONICAL_RELEASE"},
+    "hub_repository": {"type": "string", "minLength": 1},
+    "opengrad_git_commit": {"type": "string", "minLength": 1},
+    "canonical_schema_version": {"const": "tool_use_ir_v1"},
+    "behavior_taxonomy_version": {"const": "tool-use-behavior-taxonomy-v1"},
+    "generation_timestamp": {"type": "string"},
+    "record_count": {"type": "integer", "minimum": 0},
+    "sources": {"type": "array", "items": {"type": "object", "required": ["source", "source_revision", "input_manifest_sha256", "records", "output_shards"], "properties": {"source": {"type": "string"}, "source_revision": {"type": "string"}, "input_manifest": {"type": "string"}, "input_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "records": {"type": "integer", "minimum": 0}, "output_shards": {"type": "array", "items": {"type": "string"}}}, "additionalProperties": true}},
+    "excluded_sources": {"type": "array", "items": {"type": "object", "required": ["source", "reason"], "properties": {"source": {"type": "string"}, "reason": {"type": "string"}}, "additionalProperties": true}},
+    "output_shards": {"type": "array", "items": {"type": "object", "required": ["file", "sha256", "bytes"], "properties": {"file": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "bytes": {"type": "integer", "minimum": 1}}, "additionalProperties": false}}
+  },
+  "additionalProperties": true
+}

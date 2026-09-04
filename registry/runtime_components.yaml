@@ -1,0 +1,20 @@
+schema_version: 1
+components:
+  - id: nvidia-modelopt
+    kind: quantization
+    status: REFERENCE_ONLY
+    platforms: {nvidia: NOT_TESTED, amd: UNKNOWN, cpu: UNKNOWN}
+    upstream: [https://github.com/NVIDIA/Model-Optimizer]
+    notes: NVIDIA ModelOpt integration is reserved; no OpenGrad quantization or compatibility measurement exists.
+  - id: vllm-speculators
+    kind: speculative_decoding
+    status: REFERENCE_ONLY
+    platforms: {nvidia: NOT_TESTED, amd: NOT_TESTED, cpu: UNKNOWN}
+    upstream: [https://github.com/vllm-project/speculators]
+    notes: Upstream reference only; no model, draft, acceptance, or throughput result exists.
+  - id: dspark
+    kind: inference_runtime
+    status: REFERENCE_ONLY
+    platforms: {nvidia: NOT_TESTED, amd: NOT_TESTED, cpu: UNKNOWN}
+    upstream: [https://github.com/ModelTC/DSpark]
+    notes: Upstream reference only; compatibility must be established by a future device preflight.

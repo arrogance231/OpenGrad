@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenGrad frozen held-out evaluation manifest",
+  "type": "object",
+  "required": ["schema_version", "manifest_id", "status", "frozen", "model_renderer_contract", "splits", "contamination_policy"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schema_version": {"type": "integer", "const": 1},
+    "manifest_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._/-]*$"},
+    "status": {"enum": ["FROZEN_PRE_GPU", "MATERIALIZED", "EXECUTED"]},
+    "frozen": {"type": "boolean", "const": true},
+    "freeze_revision": {"type": ["string", "null"]},
+    "model_renderer_contract": {
+      "type": "object",
+      "required": ["renderer", "template_hash"],
+      "properties": {
+        "renderer": {"type": "string", "minLength": 1},
+        "template_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "model_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+      },
+      "additionalProperties": false
+    },
+    "splits": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "purpose", "source", "items", "content_hash"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "purpose": {"type": "string", "minLength": 1},
+          "source": {"type": "string", "minLength": 1},
+          "items": {"type": "integer", "minimum": 0},
+          "content_hash": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "contamination_policy": {"type": "object", "required": ["training_manifests_excluded", "derived_prompts_excluded"], "properties": {"training_manifests_excluded": {"type": "array", "items": {"type": "string"}}, "derived_prompts_excluded": {"type": "boolean"}}, "additionalProperties": false},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": false
+}

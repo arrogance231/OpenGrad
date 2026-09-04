@@ -1,0 +1,2 @@
+{"id":"when-fixture-1","tools":[],"messages":[{"role":"user","content":"What is 2+2?"},{"role":"assistant","content":"4"}]}
+{"id":"when-fixture-2","tools":[{"name":"lookup"}],"conversation":"<TOOLCALL>{\"name\":\"lookup\",\"arguments\":{\"q\":\"x\"}}</TOOLCALL>"}

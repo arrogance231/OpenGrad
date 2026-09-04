@@ -10,7 +10,7 @@ dependencies = []
 
 [project.optional-dependencies]
 research = ["pyyaml>=6.0"]
-data = ["datasets>=2.20"]
+data = ["datasets>=2.20", "pyarrow>=15.0"]
 evaluation = ["jsonschema>=4.23"]
 training = ["torch", "transformers", "trl", "peft"]
 inference = ["llama-cpp-python"]
@@ -22,6 +22,7 @@ opengrad-preflight = "opengrad.cli:preflight_cli"
 opengrad-validate = "opengrad.registry.validate:main"
 opengrad-contamination = "opengrad.contamination.cli:main"
 opengrad-data-audit = "opengrad.cli:data_audit_cli"
+opengrad-data = "opengrad.data.cli:main"
 
 [build-system]
 requires = ["hatchling"]

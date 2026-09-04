@@ -1607,6 +1607,7 @@ source = { editable = "." }
 [package.optional-dependencies]
 data = [
     { name = "datasets" },
+    { name = "pyarrow" },
 ]
 dev = [
     { name = "jsonschema" },
@@ -1639,6 +1640,7 @@ requires-dist = [
     { name = "llama-cpp-python", marker = "extra == 'inference'" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.11" },
     { name = "peft", marker = "extra == 'training'" },
+    { name = "pyarrow", marker = "extra == 'data'", specifier = ">=15.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "pyyaml", marker = "extra == 'dev'", specifier = ">=6.0" },
     { name = "pyyaml", marker = "extra == 'research'", specifier = ">=6.0" },

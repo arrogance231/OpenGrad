@@ -1,0 +1,1 @@
+{"id":"loop-fixture-1","tools":[{"name":"lookup"}],"instruction":"Use lookup","input":[{"role":"user","content":"Find x"}],"output":"[Function lookup(q='x')]"}

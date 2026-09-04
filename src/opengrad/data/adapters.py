@@ -1,71 +1,678 @@
+from __future__ import annotations
+
+import ast
+import hashlib
+import json
+import re
+from collections.abc import Callable
+from functools import lru_cache
 from typing import Any
 
 from opengrad.data.canonical import ToolConversation
 
 
-def _messages(record: dict[str, Any]) -> list[dict[str, Any]]:
+def _json(value: Any, field: str) -> Any:
+    if isinstance(value, str):
+        try:
+            return json.loads(value)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"INVALID_{field.upper()}_JSON") from exc
+    return value
+
+
+def _tool(value: Any) -> list[dict[str, Any]]:
+    value = _json(value, "tools")
+    if value is None:
+        return []
+    if isinstance(value, dict):
+        value = value.get("tools", value.get("functions", [value]))
+    if not isinstance(value, list):
+        raise TypeError("tools must be a list")
+    result = []
+    seen: dict[str, dict[str, Any]] = {}
+    for item in value:
+        if isinstance(item, str):
+            item = _json(item, "tool")
+        if not isinstance(item, dict):
+            raise TypeError("tool definition must be an object")
+        if "function" in item and isinstance(item["function"], dict):
+            item = item["function"]
+        normalized = dict(item)
+        name = normalized.get("name")
+        if (
+            isinstance(name, str)
+            and name in seen
+            and json.dumps(seen[name], sort_keys=True, ensure_ascii=False)
+            == json.dumps(normalized, sort_keys=True, ensure_ascii=False)
+        ):
+            continue
+        if isinstance(name, str):
+            seen[name] = normalized
+        result.append(normalized)
+    return result
+
+
+@lru_cache(maxsize=4096)
+def _embedded_tools(text: str) -> list[dict[str, Any]]:
+    """Extract tool JSON only from known catalogue regions."""
+    decoder = json.JSONDecoder()
+    blocks = re.findall(r"<tools>(.*?)</tools>", text, re.DOTALL)
+    if blocks:
+        values: list[dict[str, Any]] = []
+        for block in blocks:
+            for line in block.splitlines():
+                try:
+                    value = json.loads(line.strip())
+                except json.JSONDecodeError:
+                    continue
+                if isinstance(value, dict) and isinstance(value.get("name"), str):
+                    values.append(value)
+        return _tool(values)
+    # ToolACE embeds a complete JSON array in the system prompt.
+    for match in re.finditer(r"\[", text):
+        try:
+            value, _ = decoder.raw_decode(text[match.start() :])
+        except json.JSONDecodeError:
+            continue
+        if (
+            isinstance(value, list)
+            and value
+            and all(isinstance(item, dict) and isinstance(item.get("name"), str) for item in value)
+        ):
+            return _tool(value)
+    # Glaive embeds one JSON object after its prose header.
+    for match in re.finditer(r"\{", text):
+        try:
+            value, _ = decoder.raw_decode(text[match.start() :])
+        except json.JSONDecodeError:
+            continue
+        if isinstance(value, dict) and isinstance(value.get("name"), str):
+            return [value]
+    return []
+
+
+def _base(
+    record: dict[str, Any],
+    source: str,
+    split: str,
+    tools: list[dict[str, Any]],
+    messages: list[dict[str, Any]],
+    *,
+    adapter: str,
+    status: str = "VALID",
+    **extra: Any,
+) -> ToolConversation:
+    raw_hash = hashlib.sha256(
+        json.dumps(record, ensure_ascii=False, sort_keys=True, default=str).encode()
+    ).hexdigest()
+    upstream_id = str(
+        record.get("id", record.get("example_id", record.get("uid", "og_" + raw_hash[:16])))
+    )
+    metadata: dict[str, Any] = {
+        "split": split,
+        "source": {
+            "dataset_id": source,
+            "upstream_id": upstream_id,
+            "revision": record.get("source_revision"),
+            "original_split": split,
+        },
+        "source_revision": record.get("source_revision"),
+        "raw_record_hash": raw_hash,
+        "adapter": adapter,
+        "adapter_version": "1.0.0",
+        "parse_status": status,
+        "contamination_status": record.get("contamination_status", "UNASSESSED"),
+        "source_fields": sorted(record),
+        "source_features": extra,
+        "tool_context": {"tool_count": len(tools)},
+    }
+    if any(m.get("role") == "tool" for m in messages):
+        metadata["behavior"] = {
+            "decision": "CALL",
+            "capabilities": ["consume_tool_result"],
+            "confidence": "derived",
+        }
+    elif any(m.get("tool_calls") for m in messages):
+        metadata["behavior"] = {
+            "decision": "CALL",
+            "capabilities": ["single_tool_selection", "argument_grounding"],
+            "confidence": "derived",
+        }
+    else:
+        metadata["behavior"] = {"decision": "ANSWER", "capabilities": [], "confidence": "derived"}
+    return ToolConversation(upstream_id, source, tools, messages, metadata)
+
+
+def _generic(record: dict[str, Any], source: str, split: str) -> ToolConversation:
     messages = record.get("messages", record.get("conversation"))
     if not isinstance(messages, list):
         raise TypeError("missing messages/conversation list")
-    return messages
+    return _base(
+        record,
+        source,
+        split,
+        _tool(record.get("tools", record.get("functions", []))),
+        list(messages),
+        adapter="generic",
+    )
 
 
 def adapt(record: dict[str, Any], source: str, split: str = "fixture") -> ToolConversation:
     if not isinstance(record, dict) or not record.get("id"):
         raise ValueError("record id is required")
-    messages = _messages(record)
-    tools = record.get("tools", record.get("functions", []))
-    if tools is None:
-        tools = []
-    metadata = {
-        "split": split,
-        "source": {
-            "dataset_id": source,
-            "revision": record.get("source_revision"),
-            "original_split": record.get("original_split", split),
-        },
-        "source_revision": record.get("source_revision"),
-        "contamination_status": record.get("contamination_status", "UNASSESSED"),
-        "source_fields": sorted(record),
-    }
-    for key in ("behavior", "tool_context", "interaction", "training", "counterfactual"):
-        if key in record:
-            metadata[key] = record[key]
-    if "tool_context" not in metadata:
-        metadata["tool_context"] = {"tool_count": len(tools)}
-        for key in ("relevant_tool_count", "distractor_count"):
-            if record.get(key) is not None:
-                metadata["tool_context"][key] = record[key]
-    c = ToolConversation(
-        str(record["id"]),
-        source,
-        list(tools),
-        messages,
-        metadata,
-    )
+    c = _generic(record, source, split)
     c.validate()
     return c
 
 
 def adapt_xlam(record: dict[str, Any], split: str = "train") -> ToolConversation:
-    return adapt(record, "xlam-function-calling-60k", split)
+    if "messages" in record and "query" not in record:
+        return adapt(record, "xlam-function-calling-60k", split)
+    if "query" not in record or not isinstance(record["query"], str):
+        raise TypeError("missing query")
+    tools = _tool(record.get("tools", []))
+    answers = _json(record.get("answers", []), "answers")
+    if isinstance(answers, dict):
+        answers = [answers]
+    if not isinstance(answers, list):
+        raise TypeError("answers must be a list")
+    calls = []
+    final = None
+    for i, answer in enumerate(answers):
+        if not isinstance(answer, dict):
+            raise TypeError("answer must be an object")
+        name = answer.get("name", answer.get("function", answer.get("tool_name")))
+        if name:
+            args = answer.get("arguments", answer.get("parameters", {}))
+            args = _json(args, "arguments")
+            if not isinstance(args, dict):
+                raise TypeError("xLAM arguments must be an object")
+            calls.append({"id": f"call_{i:04d}", "name": name, "arguments": args})
+        elif answer.get("content") is not None:
+            final = str(answer["content"])
+    messages: list[dict[str, Any]] = [{"role": "user", "content": record["query"]}]
+    messages.append({"role": "assistant", "content": final, "tool_calls": calls})
+    c = _base(
+        record,
+        "xlam-function-calling-60k",
+        split,
+        tools,
+        messages,
+        adapter="xlam_function_calling_60k_v1",
+        source_format="query/tools/answers",
+    )
+    c.validate()
+    return c
+
+
+def _when_messages(record: dict[str, Any]) -> list[dict[str, Any]]:
+    raw = record.get("messages", record.get("conversation", record.get("text")))
+    if isinstance(raw, list):
+        return list(raw)
+    if not isinstance(raw, str):
+        raise TypeError("When2Call conversation is missing")
+    out = []
+    for part in re.split(r"(?=<TOOLCALL>|</TOOLCALL>)", raw):
+        if not part.strip():
+            continue
+        if "<TOOLCALL>" in part:
+            body = part.split("<TOOLCALL>", 1)[1].split("</TOOLCALL>", 1)[0].strip()
+            value = _json(body, "toolcall")
+            if isinstance(value, dict):
+                out.append(
+                    {
+                        "role": "assistant",
+                        "content": None,
+                        "tool_calls": [
+                            {
+                                "id": "call_0000",
+                                "name": value.get("name", value.get("function", "")),
+                                "arguments": value.get("arguments", {}),
+                            }
+                        ],
+                    }
+                )
+        else:
+            out.append({"role": "assistant", "content": part.strip()})
+    return out
 
 
 def adapt_when2call(record: dict[str, Any], split: str = "train_sft") -> ToolConversation:
-    return adapt(record, "when2call", split)
+    if "messages" in record and "conversation" not in record and record.get("id"):
+        return adapt(record, "when2call", split)
+    if split in {"mcq", "test", "llm_judge", "mcq_test", "llm_judge_test"}:
+        raise ValueError("evaluation rows cannot be normalized as training conversations")
+    messages = _when_messages(record)
+    if "prompt" in record and not any(m.get("role") == "user" for m in messages):
+        messages.insert(0, {"role": "user", "content": str(record["prompt"])})
+    tools = _tool(record.get("tools", []))
+    c = _base(
+        record,
+        "when2call",
+        split,
+        tools,
+        messages,
+        adapter="when2call_v1",
+        source_format="<TOOLCALL>",
+    )
+    c.validate()
+    return c
+
+
+def _toolace_call(text: str) -> dict[str, Any]:
+    calls = _toolace_calls(text)
+    if len(calls) != 1:
+        raise ValueError("ambiguous ToolACE call marker")
+    return calls[0]
+
+
+def _toolace_calls(text: str) -> list[dict[str, Any]]:
+    """Parse ToolACE's Python-like calls without evaluating source text."""
+    match = re.search(r"\[(?:Function\s+)?(.*)\]", text, re.DOTALL)
+    if not match:
+        raise ValueError("ToolACE call marker not found")
+    body = match.group(1).strip()
+    parts: list[str] = []
+    start = 0
+    depth = 0
+    quote: str | None = None
+    escaped = False
+    seen_open = False
+    for index, char in enumerate(body):
+        if quote:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == quote:
+                quote = None
+        elif char in {"'", '"'}:
+            quote = char
+        elif char in "([{":
+            depth += 1
+            if char == "(":
+                seen_open = True
+        elif char in ")]}":
+            depth -= 1
+        elif char == "," and depth == 0 and seen_open:
+            parts.append(body[start:index].strip())
+            start = index + 1
+    parts.append(body[start:].strip())
+    result: list[dict[str, Any]] = []
+    try:
+        for part in parts:
+            opening = part.rfind("(")
+            if opening <= 0 or not part.endswith(")"):
+                raise ValueError("malformed call")
+            name = part[:opening].strip()
+            args_text = part[opening + 1 : -1].strip()
+            arguments: dict[str, Any] = {}
+            arg_parts: list[str] = []
+            arg_start = 0
+            arg_depth = 0
+            arg_quote: str | None = None
+            arg_escape = False
+            for arg_index, arg_char in enumerate(args_text):
+                if arg_quote:
+                    if arg_escape:
+                        arg_escape = False
+                    elif arg_char == "\\":
+                        arg_escape = True
+                    elif arg_char == arg_quote:
+                        arg_quote = None
+                elif arg_char in {"'", '"'}:
+                    arg_quote = arg_char
+                elif arg_char in "[{(":
+                    arg_depth += 1
+                elif arg_char in "]})":
+                    arg_depth -= 1
+                elif arg_char == "," and arg_depth == 0:
+                    arg_parts.append(args_text[arg_start:arg_index].strip())
+                    arg_start = arg_index + 1
+            if args_text:
+                arg_parts.append(args_text[arg_start:].strip())
+            for arg_part in arg_parts:
+                if "=" not in arg_part:
+                    raise ValueError("positional arguments are unsupported")
+                key, raw_value = (piece.strip() for piece in arg_part.split("=", 1))
+                if not re.fullmatch(r"[A-Za-z_$][\w$.-]*", key):
+                    raise ValueError("invalid argument name")
+                try:
+                    arguments[key] = ast.literal_eval(raw_value)
+                except (ValueError, SyntaxError):
+                    arguments[key] = json.loads(raw_value)
+            result.append({"id": "", "name": name, "arguments": arguments})
+    except (SyntaxError, ValueError, TypeError, MemoryError) as exc:
+        raise ValueError("INVALID_ARGUMENT_SYNTAX") from exc
+    if not result:
+        raise ValueError("empty ToolACE call list")
+    return result
 
 
 def adapt_toolace(record: dict[str, Any], split: str = "train") -> ToolConversation:
-    return adapt(record, "toolace", split)
+    if "messages" in record and "conversations" not in record:
+        return adapt(record, "toolace", split)
+    conv = record.get("conversations")
+    if conv is None and "from" in record and "value" in record:
+        conv = [{"from": record["from"], "value": record["value"]}]
+    if not isinstance(conv, list):
+        raise TypeError("ToolACE conversations must be a list")
+    tools = _tool(record.get("tools", []))
+    system = record.get("system", "")
+    if isinstance(system, str) and not tools:
+        tools = list(_embedded_tools(system))
+        for block in re.findall(r"<tool>(.*?)</tool>", system, re.DOTALL):
+            try:
+                tools.extend(_tool(block))
+            except (TypeError, ValueError):
+                pass
+    messages = []
+    last_call_id: str | None = None
+    next_call_id = 0
+    for item in conv:
+        if not isinstance(item, dict):
+            raise TypeError("ToolACE conversation item must be an object")
+        role = {
+            "human": "user",
+            "user": "user",
+            "gpt": "assistant",
+            "assistant": "assistant",
+            "tool": "tool",
+        }.get(str(item.get("from", item.get("role"))))
+        if not role:
+            raise ValueError("unknown ToolACE role")
+        content = item.get("value", item.get("content", ""))
+        msg = {"role": role, "content": content}
+        if (
+            role == "assistant"
+            and isinstance(content, str)
+            and content.lstrip().startswith("[")
+            and "(" in content
+        ):
+            calls = _toolace_calls(content)
+            for call in calls:
+                call["id"] = f"call_{next_call_id:04d}"
+                next_call_id += 1
+            last_call_id = calls[-1]["id"]
+            msg["tool_calls"] = calls
+            msg["content"] = content.split("[Function", 1)[0].strip() or None
+        if role == "tool" and last_call_id:
+            msg["tool_call_id"] = last_call_id
+        messages.append(msg)
+    if system:
+        messages.insert(0, {"role": "system", "content": system})
+    c = _base(
+        record,
+        "toolace",
+        split,
+        tools,
+        messages,
+        adapter="toolace_v1",
+        source_format="system/conversations from/value",
+    )
+    c.validate()
+    return c
+
+
+def _tagged_messages(
+    record: dict[str, Any], source: str, split: str, adapter: str
+) -> ToolConversation:
+    raw = record.get("messages", record.get("chat"))
+    if not isinstance(raw, list):
+        raise TypeError("message list is required")
+    tools = _tool(record.get("tools", []))
+    messages = []
+    next_call_id = 0
+    for item in raw:
+        if not isinstance(item, dict):
+            raise TypeError("message must be an object")
+        role = item.get("role", item.get("from"))
+        text = item.get("content", item.get("value", ""))
+        msg = {"role": role, "content": text}
+        if role == "assistant" and isinstance(text, str):
+            calls = []
+            for body in re.findall(r"<call>(.*?)</call>", text, re.DOTALL):
+                parsed = _json(body.strip(), "call")
+                if isinstance(parsed, list):
+                    calls.extend(parsed)
+                elif isinstance(parsed, dict):
+                    calls.append(parsed)
+                else:
+                    raise TypeError("call payload must be an object or array")
+            if any(
+                not isinstance(call, dict) or not isinstance(call.get("name"), str)
+                for call in calls
+            ):
+                raise ValueError("call payload needs a name")
+            if calls:
+                msg["tool_calls"] = [
+                    {
+                        "id": f"call_{next_call_id + i:04d}",
+                        "name": x["name"],
+                        "arguments": x.get("arguments", {}),
+                    }
+                    for i, x in enumerate(calls)
+                ]
+                next_call_id += len(calls)
+                msg["content"] = (
+                    re.sub(r"<call>.*?</call>", "", text, flags=re.DOTALL).strip() or None
+                )
+        messages.append(msg)
+    call_ids = [
+        str(call.get("id"))
+        for message in messages
+        if message.get("role") == "assistant"
+        for call in (message.get("tool_calls") or [])
+        if call.get("id")
+    ]
+    observation_index = 0
+    for message in messages:
+        if message.get("role") == "tool" and "tool_call_id" not in message:
+            if observation_index >= len(call_ids):
+                raise ValueError("tool result has no preceding call")
+            message["tool_call_id"] = call_ids[observation_index]
+            observation_index += 1
+    if not tools:
+        system_text = next(
+            (str(m.get("content", "")) for m in messages if m.get("role") == "system"), ""
+        )
+        tools = _embedded_tools(system_text)
+    c = _base(record, source, split, tools, messages, adapter=adapter, source_format="messages")
+    c.validate()
+    return c
 
 
 def adapt_button(record: dict[str, Any], split: str = "train") -> ToolConversation:
-    return adapt(record, "button", split)
+    if (
+        "messages" in record
+        and "chat" not in record
+        and not any("<call>" in str(message.get("content", "")) for message in record["messages"])
+    ):
+        return adapt(record, "button", split)
+    c = _tagged_messages(record, "button", split, "button_instruct_v1")
+    c.metadata["source_features"]["source_reasoning_present"] = any(
+        "<think>" in str(m.get("content", "")) for m in c.messages
+    )
+    c.metadata["source_features"]["source_reasoning_policy"] = "QUARANTINED"
+    return c
 
 
 def adapt_looptool(record: dict[str, Any], split: str = "train") -> ToolConversation:
-    return adapt(record, "looptool-23k", split)
+    if "messages" in record and "input" not in record:
+        return adapt(record, "looptool-23k", split)
+    instruction = record.get("instruction", "")
+    history = record.get("input", record.get("dialogue", []))
+    output = record.get("output")
+    if not isinstance(history, (list, str)):
+        raise TypeError("LoopTool input must be dialogue history")
+    if isinstance(history, list):
+        messages = list(history)
+    else:
+        chunks = re.findall(r"<\|im_start\|>(\w+)\s*(.*?)<\|im_end\|>", history, re.DOTALL)
+        messages = [
+            {"role": "tool" if "<tool_response>" in text else role, "content": text.strip()}
+            for role, text in chunks
+        ] or [{"role": "user", "content": history}]
+    if output is not None:
+        output_text = str(output)
+        calls: list[dict[str, Any]] = []
+        for body in re.findall(r"<tool_call>\s*(.*?)\s*</tool_call>", output_text, re.DOTALL):
+            value = _json(body, "tool_call")
+            if isinstance(value, dict) and value.get("name"):
+                calls.append(
+                    {
+                        "id": f"call_{len(calls):04d}",
+                        "name": value["name"],
+                        "arguments": _json(value.get("arguments", {}), "arguments"),
+                    }
+                )
+        if not calls and "[" in output_text and "]" in output_text:
+            calls = _toolace_calls(output_text)
+            for index, call in enumerate(calls):
+                call["id"] = f"call_{index:04d}"
+        message: dict[str, Any] = {"role": "assistant", "content": output_text}
+        if calls:
+            message["tool_calls"] = calls
+            message["content"] = (
+                re.sub(r"<tool_call>.*?</tool_call>", "", output_text, flags=re.DOTALL).strip()
+                or None
+            )
+        messages.append(message)
+    tools = _tool(record.get("tools", []))
+    if not tools and isinstance(instruction, str):
+        tools = _embedded_tools(instruction)
+    call_ids = [
+        call["id"]
+        for message in messages
+        if message.get("role") == "assistant"
+        for call in message.get("tool_calls", [])
+    ]
+    for index, message in enumerate(messages):
+        if message.get("role") == "tool" and call_ids and "tool_call_id" not in message:
+            message["tool_call_id"] = call_ids[min(index, len(call_ids) - 1)]
+    synthetic = {
+        "id": record.get("id", record.get("example_id", "unknown")),
+        "source_revision": record.get("source_revision"),
+    }
+    c = _base(
+        {**record, **synthetic},
+        "looptool-23k",
+        split,
+        tools,
+        messages,
+        adapter="looptool_23k_v1",
+        source_format="instruction/input/output",
+        derived_from="ToolACE (reported upstream lineage)",
+    )
+    c.metadata["system_instruction"] = instruction
+    c.validate()
+    return c
+
+
+def adapt_when2call_preference(record: dict[str, Any], split: str = "train_pref") -> Any:
+    from opengrad.data.canonical import CanonicalPreferenceExample
+
+    chosen = record.get("chosen_response")
+    rejected = record.get("rejected_response")
+    if not isinstance(chosen, dict) or not isinstance(rejected, dict):
+        raise TypeError("When2Call preference responses are required")
+    result = CanonicalPreferenceExample(
+        str(record.get("uuid", record.get("id", "unknown"))),
+        {"dataset_id": "when2call", "split": split, "revision": record.get("source_revision")},
+        _tool(record.get("tools", [])),
+        list(record.get("messages", [])),
+        chosen,
+        rejected,
+        {"eligibility": "preference_only", "source_fields": sorted(record)},
+    )
+    result.validate()
+    return result
+
+
+def adapt_when2call_evaluation(record: dict[str, Any], split: str = "mcq") -> Any:
+    from opengrad.data.canonical import CanonicalEvaluationExample
+
+    result = CanonicalEvaluationExample(
+        str(record.get("uuid", record.get("id", "unknown"))),
+        {"dataset_id": "when2call", "split": split, "revision": record.get("source_revision")},
+        str(record.get("question", "")),
+        _tool(record.get("tools", [])),
+        str(record.get("correct_answer", "UNKNOWN")),
+        record.get("answers", {}) if isinstance(record.get("answers", {}), dict) else {},
+        {"eligibility": "evaluation_only", "source_fields": sorted(record)},
+    )
+    result.validate()
+    return result
 
 
 def adapt_glaive(record: dict[str, Any], split: str = "train") -> ToolConversation:
-    return adapt(record, "glaive-function-calling-v2", split)
+    if isinstance(record.get("messages"), list) and "chat" not in record:
+        return adapt(record, "glaive-function-calling-v2", split)
+    chat = record.get("chat", record.get("messages"))
+    system = record.get("system", "")
+    if not isinstance(chat, str):
+        return _tagged_messages(record, "glaive-function-calling-v2", split, "glaive_v2")
+    parts = re.split(r"(?=USER:|ASSISTANT:|FUNCTION RESPONSE:)", chat)
+    messages = []
+    pending = 0
+    for part in parts:
+        part = part.strip()
+        if not part:
+            continue
+        if part.startswith("USER:"):
+            messages.append({"role": "user", "content": part[5:].strip()})
+        elif part.startswith("ASSISTANT:"):
+            text = part[9:].strip()
+            calls = []
+            for body in re.findall(r"<functioncall>\s*(.*?)\s*</functioncall>", text, re.DOTALL):
+                value = _json(body, "functioncall")
+                if not isinstance(value, dict) or not value.get("name"):
+                    raise ValueError("malformed Glaive function call")
+                args = value.get("arguments", {})
+                args = _json(args, "arguments")
+                if not isinstance(args, dict):
+                    raise TypeError("Glaive arguments must be an object")
+                calls.append(
+                    {"id": f"call_{pending:04d}", "name": value["name"], "arguments": args}
+                )
+                pending += 1
+            messages.append(
+                {
+                    "role": "assistant",
+                    "content": re.sub(
+                        r"<functioncall>.*?</functioncall>", "", text, flags=re.DOTALL
+                    ).strip()
+                    or None,
+                    "tool_calls": calls,
+                }
+            )
+        elif part.startswith("FUNCTION RESPONSE:"):
+            messages.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": f"call_{max(0, pending - 1):04d}",
+                    "content": part[18:].strip(),
+                }
+            )
+    c = _base(
+        record,
+        "glaive-function-calling-v2",
+        split,
+        _tool(record.get("tools", [])) or _embedded_tools(str(system)),
+        messages,
+        adapter="glaive_function_calling_v2_v1",
+        source_format="system/chat delimiters",
+    )
+    c.metadata["system"] = system
+    c.validate()
+    return c
+
+
+ADAPTERS: dict[str, Callable[[dict[str, Any], str], ToolConversation]] = {
+    "xlam": adapt_xlam,
+    "when2call": adapt_when2call,
+    "toolace": adapt_toolace,
+    "button": adapt_button,
+    "looptool": adapt_looptool,
+    "glaive": adapt_glaive,
+}

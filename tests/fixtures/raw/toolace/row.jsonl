@@ -1,0 +1,1 @@
+{"id":"toolace-fixture-1","tools":[{"name":"lookup"}],"system":"tools available","conversations":[{"from":"human","value":"Find x"},{"from":"gpt","value":"[Function lookup(q='x')]"},{"from":"tool","value":"ok"}]}

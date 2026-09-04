@@ -1,5 +1,7 @@
 # Phase 0.5 — Pre-Experiment Validation Report
 
+Historical phase report. Its statements describe the Phase 0.5 checkpoint; current accessible-corpus completion is recorded in `reports/data-normalization-v1.md` and `ROADMAP.md`.
+
 ## 1. Completed work
 
 Implemented CPU-safe canonical tool schema validation, six source adapter boundaries with fixtures, model-family renderer seams, strict tool-call parser states, synthetic contamination methods, benchmark mock harnesses, normalized evaluation results, taxonomy mapping, experiment definition, lineage and stage gates, data statistics and mixture analysis, configuration validation, report generation, environment capture, CLI preflight, and Phase 1/2 protocols.

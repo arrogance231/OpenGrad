@@ -10,9 +10,12 @@
     "sample_count": {"type": "integer", "minimum": 1},
     "source_evaluation": {"type": ["string", "null"]},
     "confidence": {"type": ["string", "null"]},
+    "evaluation_manifest": {"type": ["string", "null"]},
+    "evidence_count": {"type": ["integer", "null"], "minimum": 0},
+    "algorithm_version": {"type": ["string", "null"]},
     "metrics": {"type": "object"},
     "confusion_matrix": {"type": "object"},
-    "residuals": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}}
+    "residuals": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}}
   },
   "additionalProperties": false
 }

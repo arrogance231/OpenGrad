@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenGrad GPU resource preflight record",
+  "type": "object",
+  "required": ["schema_version", "status", "requested", "observed", "compatibility"],
+  "properties": {
+    "schema_version": {"type": "integer", "const": 1},
+    "status": {"enum": ["NOT_RUN", "READY", "BLOCKED", "INCOMPLETE"]},
+    "requested": {
+      "type": "object", "required": ["provider", "device_count", "min_vram_gib"],
+      "properties": {"provider": {"enum": ["nvidia", "amd", "cpu", "unknown"]}, "device_count": {"type": "integer", "minimum": 0}, "min_vram_gib": {"type": ["number", "null"], "minimum": 0}, "backend": {"type": ["string", "null"]}},
+      "additionalProperties": false
+    },
+    "observed": {
+      "type": "object", "required": ["device_count", "devices"],
+      "properties": {"device_count": {"type": "integer", "minimum": 0}, "driver": {"type": ["string", "null"]}, "cuda_version": {"type": ["string", "null"]}, "rocm_version": {"type": ["string", "null"]}, "devices": {"type": "array", "items": {"type": "object"}}},
+      "additionalProperties": false
+    },
+    "compatibility": {"type": "object", "required": ["provider", "runtime", "result"], "properties": {"provider": {"enum": ["nvidia", "amd", "cpu", "unknown"]}, "runtime": {"type": "string", "minLength": 1}, "result": {"enum": ["UNKNOWN", "COMPATIBLE", "INCOMPATIBLE", "NOT_TESTED"]}, "basis": {"type": "string", "minLength": 1}}, "additionalProperties": false},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

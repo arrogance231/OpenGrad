@@ -1,6 +1,6 @@
 # Tool-use mixture methodology
 
-Status: SCHEMA-READY / HYPOTHESIS-ONLY. No full corpus has been materialized and no model has been trained.
+Status: PRE_GPU_COMPLETE / BASELINE_INFERENCE_READY. Accessible corpora are materialized and audited; no model has been trained or evaluated.
 
 ## Research framing
 

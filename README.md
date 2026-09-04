@@ -107,7 +107,7 @@ The study will cover, when the corresponding evaluation is implemented:
 - consuming tool observations and handling tool failure;
 - maintaining state across multi-turn tasks.
 
-The first planned baseline is [`Qwen/Qwen3.5-2B`](registry/models.yaml), recorded as `qwen3.5-2b` at an immutable planned revision in the [experiment definition](configs/experiments/tool_calling/qwen35_2b_baseline.yaml). It is **PLANNED only**. No model has been downloaded, loaded, trained, or evaluated by OpenGrad.
+The first baseline is [`Qwen/Qwen3.5-2B`](registry/models.yaml), recorded as `qwen3.5-2b` at an immutable revision in the [experiment definition](configs/experiments/tool_calling/qwen35_2b_baseline.yaml). It is **READY / NOT RUN**. No model has been downloaded, loaded, trained, or evaluated by OpenGrad.
 
 ## Experimental decision pipeline
 
@@ -131,13 +131,15 @@ flowchart TD
 
 ## Current research status
 
+Pre-GPU preparation: COMPLETE / BASELINE_INFERENCE_READY. The first empirical action is B0 baseline inference; no model result exists yet.
+
 | Stage | Status | Evidence |
 | --- | --- | --- |
 | Repository and research infrastructure | VALIDATED | [Bootstrap report](BOOTSTRAP_REPORT.md) |
 | CPU fixture and preflight validation | VALIDATED | [Phase 0.5 report](PRE_EXPERIMENT_REPORT.md) |
-| Qwen3.5-2B baseline reproduction | PLANNED | [Baseline record](configs/experiments/tool_calling/qwen35_2b_baseline.yaml) |
-| Dataset materialization and audit | PLANNED | [Materialization protocol](docs/data/DATASET_MATERIALIZATION_PROTOCOL.md) |
-| Tool-use SFT | PLANNED | [Roadmap](ROADMAP.md) |
+| Qwen3.5-2B baseline reproduction | READY / NOT RUN | [Baseline record](configs/experiments/tool_calling/qwen35_2b_baseline.yaml) |
+| Dataset materialization and audit | COMPLETE for current accessible pinned corpora; BUTTON and xLAM included | [Normalization report](reports/data-normalization-v1.md) |
+| Tool-use SFT | NOT STARTED | [Roadmap](ROADMAP.md) |
 | Preference optimization | CONDITIONAL | Only if full evaluation justifies it |
 | On-policy distillation | PLANNED | [Roadmap](ROADMAP.md) |
 | Cross-model replication | PLANNED | [Roadmap](ROADMAP.md) |
@@ -146,18 +148,22 @@ flowchart TD
 
 `VALIDATED` here means repository or fixture infrastructure passed its checks. It does not mean an ML model or real benchmark was validated. The status vocabulary used by experiment records is defined by the [experiment schema](registry/experiments.schema.json).
 
-## Dataset program
+## Dataset releases
 
-The dataset registry records source identity, revisions, intended stages, split restrictions, contamination risk, and processing state. Fixture adapters are implemented for the six planned tool-use sources below; full corpora have not been downloaded or materialized. OpenGrad now preserves two axes: where an example came from (source provenance) and what it trains (behavioral capability). Datasets are sources of evidence, not capabilities by themselves.
+OpenGrad publishes large normalized research artifacts on Hugging Face while GitHub remains the canonical home for normalization code, schemas, manifests, audits, provenance, and experiment definitions. The prepared release is [`arrochi112/OpenGrad-ToolPolicy-Canonical-v1`](https://huggingface.co/datasets/arrochi112/OpenGrad-ToolPolicy-Canonical-v1) and is now publicly published and verified at Hub commit `4d2bf3ab1cd480f04c13627c153a4cf9cf4e145f`. It is a model-independent pre-training canonical candidate corpus, not a recommended mixture, Qwen-rendered training data, M0, M1, M2, or a model result. The release excludes xLAM pending gated redistribution review.
+
+The release excludes the frozen evaluation set, When2Call preference data, and Qwen-rendered text. xLAM is materialized locally but remains excluded from the default publication build pending review of its gated redistribution terms.
+
+The dataset registry records source identity, revisions, intended stages, split restrictions, contamination risk, and processing state. All currently accessible pinned corpora have now been materialized or normalized through bounded, resumable canonical artifacts; BUTTON has been normalized with 59 duplicate-tool failures quarantined. OpenGrad preserves two axes: where an example came from (source provenance) and what it trains (behavioral capability). Datasets are sources of evidence, not capabilities by themselves.
 
 | Dataset | Purpose in the program | Current support | Training eligibility | Provenance |
 | --- | --- | --- | --- | --- |
-| [xLAM / APIGen Function Calling 60k](registry/datasets.yaml) | Function selection and argument generation | Fixture adapter; full materialization pending | Future SFT; `train` | Salesforce snapshot revision recorded in registry |
-| [When2Call](registry/datasets.yaml) | Call/no-call decisions and answer quality | Fixture adapter; split counts unresolved | Future SFT, preference, evaluation; only `train` for SFT | NVIDIA HF and GitHub sources recorded |
-| [ToolACE](registry/datasets.yaml) | Complex schemas, candidate tools, parallel/dependent calls, negatives | Fixture adapter; full materialization pending | Future SFT | Team-ACE source revision recorded |
-| [BUTTON / BUTTONInstruct](registry/datasets.yaml) | Multi-turn compositional trajectories | Fixture adapter; full materialization pending | Future SFT | Repository commit recorded |
-| [LoopTool-23k](registry/datasets.yaml) | Loop/tool trajectories requiring lineage audit | Fixture adapter; full materialization pending | Future SFT | Source revision recorded; possible derivation overlap |
-| [Glaive Function Calling v2](registry/datasets.yaml) | Additional function-calling coverage | Fixture adapter; quality filtering pending | Future SFT | HF snapshot revision recorded |
+| [xLAM / APIGen Function Calling 60k](registry/datasets.yaml) | Function selection and argument generation | FULL_DATA_VALIDATED: 59,370 retained; 259 failures; 371 duplicates | Future SFT; `train` | Salesforce snapshot revision recorded in registry |
+| [When2Call](registry/datasets.yaml) | Call/no-call decisions and answer quality | FULL_DATA_VALIDATED for accessible SFT/preference/evaluation splits | SFT, preference, evaluation remain separate | NVIDIA HF and GitHub sources recorded |
+| [ToolACE](registry/datasets.yaml) | Complex schemas, candidate tools, parallel/dependent calls, negatives | FULL_DATA_VALIDATED with quarantined malformed rows | Future SFT | Team-ACE source revision recorded |
+| [BUTTON / BUTTONInstruct](registry/datasets.yaml) | Multi-turn compositional trajectories | FULL_DATA_VALIDATED: 7,941 retained; 59 duplicate-tool failures quarantined; rendering and audits complete | Future SFT | Repository commit recorded |
+| [LoopTool-23k](registry/datasets.yaml) | Loop/tool trajectories requiring lineage audit | FULL_DATA_VALIDATED with quarantined malformed rows | Future SFT | Source revision recorded; possible derivation overlap |
+| [Glaive Function Calling v2](registry/datasets.yaml) | Additional function-calling coverage | FULL_DATA_VALIDATED | Future SFT | HF snapshot revision recorded |
 
 These states are deliberately different:
 
@@ -166,7 +172,7 @@ adapter implemented ≠ fixture validated ≠ metadata validated
 metadata validated ≠ full dataset materialized ≠ used in an experiment
 ```
 
-The historical [`tool-calling-mixture-v1`](configs/data/tool_calling/mixture_v1.yaml) is retained as M0, a source-oriented control hypothesis. M1 is the behaviorally balanced [`balanced_policy_v1`](configs/data/tool_calling/balanced_policy_v1.yaml); M2 is the baseline-dependent, schema-ready [`residual_policy_v1`](configs/data/tool_calling/residual_policy_v1.yaml). None has been materialized. See the [tool-use mixture methodology](docs/data/tool-use-mixture-methodology.md) and [behavior matrix](docs/data/training-behavior-matrix.md). Materialization must preserve source metadata and terms, verify checksums, normalize, label, deduplicate, scan contamination, filter, and freeze a version before training ([protocol](docs/data/DATASET_MATERIALIZATION_PROTOCOL.md)).
+The historical [`tool-calling-mixture-v1`](configs/data/tool_calling/mixture_v1.yaml) is retained as M0, a source-oriented control hypothesis. M1 is the behaviorally balanced [`balanced_policy_v1`](configs/data/tool_calling/balanced_policy_v1.yaml); M2 is the baseline-dependent, schema-ready [`residual_policy_v1`](configs/data/tool_calling/residual_policy_v1.yaml). No mixture has been trained. See the [tool-use mixture methodology](docs/data/tool-use-mixture-methodology.md) and [behavior matrix](docs/data/training-behavior-matrix.md). Materialization preserves source metadata and terms, verifies checksums, normalizes, labels, deduplicates, audits overlap, and freezes versioned artifacts ([protocol](docs/data/DATASET_MATERIALIZATION_PROTOCOL.md)).
 
 `Salesforce/APIGen-MT-5k` is explicitly excluded from the clean default because of possible τ-bench/τ² overlap. If it is ever used, it must use the contaminated namespace and its scores cannot be presented as clean generalization ([contamination configuration](configs/data/tool_calling/contamination.yaml)).
 
@@ -249,10 +255,11 @@ flowchart TD
 - `src/opengrad/` — canonical data, fixture adapters, parsing, contamination tools, evaluation schemas, lineage, stage gates, and reporting utilities.
 - `configs/` — data, evaluation, model, training, inference, and planned experiment configurations.
 - `experiments/`, `reports/`, `results/` — append-only namespaces for future evidence; no completed result is present.
-- `docs/` — methodology, architecture, data, benchmark, inference, reproducibility, and contribution protocols.
+- `docs/` — methodology, architecture, data, benchmark, inference, reproducibility, contribution, and publication protocols.
+- `release/` — tracked Hugging Face release definitions, dataset-card template, attribution audit, and citations.
 - `hf/` — model-card, dataset-card, and experiment-report templates.
 
-Training and inference implementations are intentionally absent from the current bootstrap phase. Large data and checkpoints remain outside Git and must be referenced by immutable revisions and hashes.
+Training and inference implementations are intentionally not executed in the current pre-GPU phase. Large data and checkpoints remain outside Git and must be referenced by immutable revisions and hashes.
 
 ## Reproducibility and provenance
 
@@ -297,7 +304,7 @@ The stable results namespace is ready for future records. The empty table is int
 | Experiment | Model | Change | Capability Δ | Regression | Efficiency Δ | Reproduced | Report |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 
-`results/registry.jsonl` is currently empty. Do not confuse the 29 passing CPU tests reported by Phase 0.5 with ML evidence: they validate infrastructure and fixtures, not model quality.
+`results/registry.jsonl` is currently empty. Do not confuse the 63 passing CPU tests reported by the pre-GPU validation with ML evidence: they validate infrastructure and fixtures, not model quality.
 
 ### Illustrative future record
 

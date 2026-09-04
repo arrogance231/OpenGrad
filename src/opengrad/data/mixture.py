@@ -27,7 +27,12 @@ def validate_mixture(config: dict[str, Any], known_sources: set[str] | None = No
     mixture_class = config.get("mixture_class")
     if mixture_class not in MIXTURE_CLASSES:
         raise ValueError(f"invalid mixture_class: {mixture_class}")
-    if config.get("status") not in {"HYPOTHESIS_ONLY", "SCHEMA_READY", "MATERIALIZED"}:
+    if config.get("status") not in {
+        "HYPOTHESIS_ONLY",
+        "SCHEMA_READY",
+        "SCHEMA_READY_UNRESOLVED",
+        "MATERIALIZED",
+    }:
         raise ValueError("invalid mixture status")
     if mixture_class == "residual_driven" and not config.get("baseline_experiment"):
         raise ValueError("residual-driven mixture requires baseline_experiment")

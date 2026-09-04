@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OpenGrad optimization and runtime registry",
+  "type": "object",
+  "required": ["schema_version", "components"],
+  "properties": {
+    "schema_version": {"type": "integer", "const": 1},
+    "components": {"type": "array", "items": {"type": "object", "required": ["id", "kind", "status", "platforms"], "properties": {"id": {"type": "string", "minLength": 1}, "kind": {"enum": ["quantization", "speculative_decoding", "training_runtime", "inference_runtime"]}, "status": {"enum": ["REFERENCE_ONLY", "INTERFACE_ONLY", "NOT_TESTED", "SUPPORTED_AFTER_VERIFICATION"]}, "platforms": {"type": "object", "properties": {"nvidia": {"enum": ["UNKNOWN", "NOT_TESTED", "COMPATIBLE", "INCOMPATIBLE"]}, "amd": {"enum": ["UNKNOWN", "NOT_TESTED", "COMPATIBLE", "INCOMPATIBLE"]}, "cpu": {"enum": ["UNKNOWN", "NOT_TESTED", "COMPATIBLE", "INCOMPATIBLE"]}}, "additionalProperties": false}, "upstream": {"type": "array", "items": {"type": "string", "format": "uri"}}, "notes": {"type": "string"}}, "additionalProperties": false}}
+  },
+  "additionalProperties": false
+}

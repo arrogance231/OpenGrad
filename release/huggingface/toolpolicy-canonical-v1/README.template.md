@@ -1,0 +1,75 @@
+---
+pretty_name: OpenGrad ToolPolicy Canonical v1
+language:
+- en
+license: other
+task_categories:
+- text-generation
+configs:
+- config_name: canonical
+  data_files:
+  - split: train
+    path: "*.parquet"
+---
+
+> This is a provenance-preserving canonical candidate corpus. It is a pre-training canonical release, not an empirically selected or recommended training mixture.
+
+## What this release is
+
+OpenGrad ToolPolicy Canonical v1 is a provenance-preserving, model-independent normalization of several public tool-use and function-calling datasets. It is released as a pre-training candidate corpus for controlled research into tool-use policy in small open-weight language models. See [OpenGrad](https://github.com/arrogance231/OpenGrad) for the production methodology and reproducibility artifacts.
+
+## What this release is not
+
+It is not a final recommended training mixture, a Qwen3.5 training dataset, M0, M1, M2, or a post-training result. No claim is made that training on all records or their natural proportions is optimal. The exact Qwen3.5-2B training mixture will be frozen separately after baseline evaluation and experiment selection.
+
+## Configurations
+
+The payload is a unified Parquet table. Filter by `source_dataset` and `source_split` for source-level views. Preference and evaluation artifacts are excluded from this release.
+
+## Source manifest
+
+| Source | Role | Upstream | Pinned revision | Raw count | Canonical retained | Published count | License/terms | Adapter version |
+|---|---|---|---|---:|---:|---:|---|---|
+{{SOURCE_TABLE}}
+
+## Record count
+
+This build contains `{{RECORD_COUNT}}` published canonical SFT records. Excluded sources are recorded in the release manifest: `{{EXCLUDED_SOURCES}}`.
+
+## Canonical schema
+
+Each row includes `opengrad_id`, `source_dataset`, `source_repo`, `source_record_id`, `source_split`, `source_revision`, `adapter`, `adapter_version`, `canonical_schema_version`, `canonical_hash`, `quality_status`, `contamination_status`, behavior decision/confidence/capabilities, and JSON-serialized canonical `tools`, `messages`, and `metadata` fields.
+
+## Normalization and quality
+
+Source adapters convert native formats into a shared semantic intermediate representation. Invalid or ambiguous source records are quarantined rather than silently repaired. The release contains only records allowed by the release policy; upstream attrition and quarantine counts remain documented in the GitHub reports.
+
+Notable limitations include 59 BUTTON duplicate-tool-definition failures, quarantined malformed ToolACE records, Glaive canonical duplicates removed before release, and 3,077 canonical-valid LoopTool records that are incompatible with the pinned Qwen renderer because they contain no user query. Those LoopTool records are not removed from this model-independent canonical release solely because of Qwen renderability.
+
+## Provenance and versioning
+
+The release manifest records the OpenGrad commit, source manifest hashes, source revisions, adapter versions, output shard hashes, release filters, and generation parameters. Future experiments must pin this release by exact Hub revision and record the experiment-specific mixture separately.
+
+## Evaluation boundary
+
+The frozen 3,952-record When2Call evaluation namespace is not included. It remains separate in the OpenGrad GitHub repository. No B0 baseline has run and no model scores are reported.
+
+## Licensing and citations
+
+OpenGrad source code is Apache-2.0. Upstream dataset terms remain source-specific and are documented in `source-licenses.md`; this release does not relicense upstream data. See `CITATIONS.bib` for source references.
+
+## Reproduction
+
+From the OpenGrad repository, run:
+
+`uv run opengrad-data build-hf-release --release-config configs/releases/toolpolicy_canonical_v1.yaml --output .release/hf/toolpolicy-canonical-v1`
+
+Then validate:
+
+`uv run opengrad-data validate-release --input .release/hf/toolpolicy-canonical-v1`
+
+The commands build local staging only. They do not upload to Hugging Face.
+
+## Responsible use
+
+Use the data in accordance with each upstream source's terms, attribution requirements, and restrictions. Do not infer that a valid tool call demonstrates reliable tool-use policy or task completion.

@@ -1,0 +1,1 @@
+{"id":"button-fixture-1","tools":[{"name":"lookup"}],"messages":[{"role":"user","content":"Find x"},{"role":"assistant","content":"<call>{\"name\":\"lookup\",\"arguments\":{\"q\":\"x\"}}</call>"}]}

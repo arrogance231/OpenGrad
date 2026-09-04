@@ -1,5 +1,5 @@
 schema_version: 1
-status: BOOTSTRAP_NO_CORPORA_DOWNLOADED
+status: ACCESSIBLE_CORPORA_MATERIALIZED_BUTTON_PENDING
 datasets:
 - id: xlam-function-calling-60k
   display_name: xLAM / APIGen Function Calling 60k
@@ -17,7 +17,7 @@ datasets:
   original_sample_count: null
   retained_sample_count: null
   preprocessing_version: null
-  checksum: null
+  checksum: 4ef5c6f0dc552f2231f93f5853a9ef431e9e806d7aa514d0f6b615606ce576c6
   category: tool_use
   intended_stages:
   - future_sft
@@ -39,11 +39,11 @@ datasets:
     published: 60000
     verified_from: https://arxiv.org/abs/2406.18518
   retained_after_filtering:
-    value: null
-    status: not_yet_processed
+    value: 59370
+    status: FULL_DATA_VALIDATED
   processed_dataset_hash:
-    value: null
-    status: pending_dataset_preparation
+    value: "see data/processed/normalization-v1/xlam/manifest.json"
+    status: FULL_DATA_VALIDATED
   exact_revision: null
   source_repository: https://huggingface.co/datasets/Salesforce/xlam-function-calling-60k
 - id: when2call
@@ -86,23 +86,22 @@ datasets:
     verified: true
     source: Hugging Face dataset snapshot API
   sample_count:
-    published: null
-    verified_from: null
-    status: unresolved_after_checked_sources
+    published: 28000
+    verified_from: https://huggingface.co/datasets/nvidia/When2Call
   retained_after_filtering:
-    value: null
-    status: not_yet_processed
+    value: 27781
+    status: FULL_DATA_VALIDATED
   processed_dataset_hash:
-    value: null
-    status: pending_dataset_preparation
+    value: "see data/processed/normalization-v1 manifests"
+    status: FULL_DATA_VALIDATED
   exact_revision: null
   source_repository: https://github.com/NVIDIA/When2Call
   published_split_sizes:
-    train_sft: null
-    train_pref: null
-    mcq: null
-    llm_judge: null
-    status: split names verified; row counts unresolved without materialization
+    train_sft: 15000
+    train_pref: 9000
+    mcq: 3652
+    llm_judge: 300
+    status: FULL_DATA_VALIDATED
 - id: toolace
   display_name: ToolACE
   organization: Team-ACE
@@ -137,15 +136,14 @@ datasets:
     verified: true
     source: Hugging Face dataset snapshot API
   sample_count:
-    published: null
-    verified_from: null
-    status: unresolved_after_checked_sources
+    published: 11300
+    verified_from: https://huggingface.co/datasets/Team-ACE/ToolACE
   retained_after_filtering:
-    value: null
-    status: not_yet_processed
+    value: 11190
+    status: FULL_DATA_VALIDATED
   processed_dataset_hash:
-    value: null
-    status: pending_dataset_preparation
+    value: "see data/processed/normalization-v1/toolace/manifest.json"
+    status: FULL_DATA_VALIDATED
   exact_revision: null
   source_repository: https://huggingface.co/datasets/Team-ACE/ToolACE
 - id: button
@@ -161,7 +159,7 @@ datasets:
     verified: true
     source: https://github.com/PKU-Baichuan-MLSystemLab/BUTTON
   redistribution: NOT_ASSESSED
-  original_sample_count: null
+  original_sample_count: 8000
   retained_sample_count: null
   preprocessing_version: null
   checksum: null
@@ -185,11 +183,11 @@ datasets:
     published: 8000
     verified_from: https://github.com/PKU-Baichuan-MLSystemLab/BUTTON
   retained_after_filtering:
-    value: null
-    status: not_yet_processed
+    value: 7941
+    status: FULL_DATA_VALIDATED
   processed_dataset_hash:
-    value: null
-    status: pending_dataset_preparation
+    value: "see data/processed/normalization-v1/button.manifest.json"
+    status: FULL_DATA_VALIDATED
   exact_revision: null
   source_repository: https://github.com/PKU-Baichuan-MLSystemLab/BUTTON
   published_split_sizes:
@@ -230,11 +228,11 @@ datasets:
     published: 23040
     verified_from: https://huggingface.co/datasets/zhangkangning/LoopTool-23k
   retained_after_filtering:
-    value: null
-    status: not_yet_processed
+    value: 20827
+    status: FULL_DATA_VALIDATED
   processed_dataset_hash:
-    value: null
-    status: pending_dataset_preparation
+    value: "see data/processed/normalization-v1/looptool/manifest.json"
+    status: FULL_DATA_VALIDATED
   exact_revision: null
   source_repository: https://huggingface.co/datasets/zhangkangning/LoopTool-23k
 - id: glaive-function-calling-v2
@@ -270,15 +268,14 @@ datasets:
     verified: true
     source: Hugging Face dataset snapshot API
   sample_count:
-    published: null
-    verified_from: null
-    status: unresolved_after_checked_sources
+    published: 112960
+    verified_from: https://huggingface.co/datasets/glaiveai/glaive-function-calling-v2
   retained_after_filtering:
-    value: null
-    status: not_yet_processed
+    value: 99794
+    status: FULL_DATA_VALIDATED
   processed_dataset_hash:
-    value: null
-    status: pending_dataset_preparation
+    value: "see data/processed/normalization-v1/glaive/manifest.json"
+    status: FULL_DATA_VALIDATED
   exact_revision: null
   source_repository: https://huggingface.co/datasets/glaiveai/glaive-function-calling-v2
 - id: apigen-mt-5k

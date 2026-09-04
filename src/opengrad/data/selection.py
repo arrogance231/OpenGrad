@@ -22,3 +22,16 @@ def validate_sft_selection(
         raise ValueError("evaluation/preference split forbidden in SFT")
     if contamination_sources and any(source in contamination_sources for source in splits):
         raise ValueError("contaminated source forbidden in clean SFT")
+
+
+def validate_training_records(records: list[dict[str, Any]]) -> None:
+    forbidden = {"preference_only", "evaluation_only", "contaminated"}
+    violations = [
+        record.get("id", "unknown")
+        for record in records
+        if record.get("metadata", {}).get("eligibility") in forbidden
+        or record.get("metadata", {}).get("contamination_status")
+        not in {None, "UNASSESSED", "CLEAN"}
+    ]
+    if violations:
+        raise ValueError(f"records forbidden from clean training: {violations}")

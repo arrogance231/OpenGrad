@@ -1,0 +1,23 @@
+schema_version: 1
+recipes:
+  - id: qwen3.5-ms-swift
+    status: REFERENCE_ONLY
+    source: https://github.com/modelscope/ms-swift/tree/main/docs/source_en/Instruction-Finetuning
+    authority: upstream documentation
+    fields_not_claimed: [exact_model_settings, exact_dataset_settings, measured_results]
+  - id: qwen-agent-tool-use
+    status: REFERENCE_ONLY
+    source: https://github.com/QwenLM/Qwen-Agent
+    authority: upstream repository
+    fields_not_claimed: [OpenGrad_training_recipe, compatibility, measured_results]
+  - id: when2call-training
+    status: REFERENCE_ONLY
+    source: https://github.com/NVIDIA/When2Call
+    authority: pinned upstream repository
+    fields_not_claimed: [OpenGrad_training_recipe, reproduced_results]
+  - id: looptool-grpo-qwen
+    status: REFERENCE_ONLY
+    source: https://github.com/ChenmienTan/LoopTool
+    authority: upstream repository
+    fields_not_claimed: [initial_sft_recipe, reproduced_results]
+notes: Values absent from upstream sources remain UNKNOWN. These references do not authorize downloads, training, or claims of support.

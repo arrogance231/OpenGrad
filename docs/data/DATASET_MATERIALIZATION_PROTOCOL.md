@@ -1,5 +1,5 @@
 # Dataset materialization protocol
 
-Phase 2 will fetch each recorded source revision, preserve source metadata and terms, verify download checksums, adapt records into the canonical schema, validate, deduplicate, scan contamination, filter, calculate retained counts and processed hashes, write a manifest, and freeze the resulting dataset version.
+The current accessible pinned sources have completed materialization. The protocol preserves source metadata and terms, verifies source checksums, adapts records into the canonical schema, validates, quarantines invalid records, deduplicates, records contamination state, calculates retained counts and processed hashes, writes manifests, and freezes versioned artifacts.
 
-`source_revision` identifies the upstream snapshot now. `processed_dataset_hash` and `retained_after_filtering` cannot exist until materialization and preprocessing have actually occurred; they remain explicitly pending rather than guessed.
+`source_revision` identifies the upstream snapshot. `processed_dataset_hash` and `retained_after_filtering` are recorded in the generated manifests after materialization. Historical pending states are retained in the engineering report where they document earlier work.

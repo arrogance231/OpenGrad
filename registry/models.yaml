@@ -11,6 +11,8 @@ models:
   chat_template: null
   tool_protocol: native Qwen protocol; runtime validation required
   native_tool_parser: null
+  renderer: qwen3_5_2b_v1
+  template_hash: 273d8e0e683b885071fb17e08d71e5f2a5ddfb5309756181681de4f5a1822d80
   multimodal: null
   license:
     value: Apache-2.0
@@ -25,5 +27,5 @@ models:
   mobile_candidate: true
   teacher_candidate: false
   student_candidate: true
-  notes: PLANNED_ONLY. Revision is the Hugging Face snapshot resolved on 2026-09-02;
-    no model is downloaded in Phase 0.5.
+  notes: PLANNED_ONLY. Revision is pinned; renderer/template contract is fixture-validated,
+    while runtime-native parser, architecture, and compatibility remain unverified.

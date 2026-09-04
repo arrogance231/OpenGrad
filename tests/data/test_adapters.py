@@ -42,3 +42,24 @@ def test_adapter_preserves_unexpected_fields_in_provenance():
         {"id": "fixture", "messages": [{"role": "user", "content": "hi"}], "unexpected": True}
     )
     assert "unexpected" in result.metadata["source_fields"]
+
+
+def test_toolace_safe_parser_handles_nested_and_punctuated_calls():
+    result = adapt_toolace(
+        {
+            "id": "nested",
+            "system": '[{"name":"Market, API"},{"name":"other.tool"}]',
+            "conversations": [
+                {"from": "user", "value": "lookup"},
+                {
+                    "from": "assistant",
+                    "value": '[Market, API(from="US", payload={"xs":[1, true, null]})]',
+                },
+            ],
+        }
+    )
+    call = next(message for message in result.messages if message.get("tool_calls"))["tool_calls"][
+        0
+    ]
+    assert call["name"] == "Market, API"
+    assert call["arguments"] == {"from": "US", "payload": {"xs": [1, True, None]}}

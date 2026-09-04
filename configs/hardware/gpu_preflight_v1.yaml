@@ -1,0 +1,21 @@
+schema_version: 1
+status: NOT_RUN
+requested:
+  provider: unknown
+  device_count: 0
+  min_vram_gib: null
+  backend: null
+observed:
+  device_count: 0
+  driver: null
+  cuda_version: null
+  rocm_version: null
+  devices: []
+compatibility:
+  provider: unknown
+  runtime: transformers
+  result: NOT_TESTED
+  basis: No accelerator preflight has been executed.
+limitations:
+  - This is a schema-valid placeholder, not evidence of GPU availability or compatibility.
+  - Do not use it to authorize inference or training.

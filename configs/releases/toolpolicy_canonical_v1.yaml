@@ -1,0 +1,40 @@
+release_name: OpenGrad ToolPolicy Canonical
+release_version: v1.0.0
+hub_repository: arrochi112/OpenGrad-ToolPolicy-Canonical-v1
+release_class: PRE_TRAINING_CANONICAL_RELEASE
+canonical_schema_version: tool_use_ir_v1
+behavior_taxonomy_version: tool-use-behavior-taxonomy-v1
+redistribution_policy: exclude_uncleared
+allow_gated_sources: false
+shard_size: 1000
+included_sources:
+  - id: xlam-function-calling-60k
+    artifact: data/processed/normalization-v1/xlam
+    source_revision: 26d14ebfe18b1f7b524bd39b404b50af5dc97866
+    redistribution_status: GATED_SOURCE_REVIEW_REQUIRED
+  - id: button
+    artifact: data/processed/normalization-v1/button
+    source_revision: 47cb720ed223b249a2f1d0a3faf1cb1eb7175622
+    redistribution_status: REDISTRIBUTION_WITH_ATTRIBUTION
+    adapter_version: 1.0.0
+  - id: toolace
+    artifact: data/processed/normalization-v1/toolace
+    source_revision: 6bda777c88d21e5a204703c1ee45597a8fa4f734
+    redistribution_status: REDISTRIBUTION_WITH_ATTRIBUTION
+  - id: looptool-23k
+    artifact: data/processed/normalization-v1/looptool
+    source_revision: b6c572d442ed4f2177f23645d8e9a77522e712c3
+    redistribution_status: REDISTRIBUTION_WITH_ATTRIBUTION
+  - id: glaive-function-calling-v2
+    artifact: data/processed/normalization-v1/glaive
+    source_revision: e7f4b6456019f5d8bcb991ef0dd67d8ff23221ac
+    redistribution_status: REDISTRIBUTION_WITH_ATTRIBUTION
+  - id: when2call
+    artifact: data/processed/normalization-v1/when2call-sft
+    source_revision: 0582f7749df63a96fdc3070932e83e72396ace53
+    redistribution_status: REDISTRIBUTION_WITH_ATTRIBUTION
+excluded_artifacts:
+  - data/processed/normalization-v1/when2call-preference
+  - data/processed/normalization-v1/when2call-mcq
+  - data/processed/normalization-v1/when2call-llm-judge
+  - reports/artifacts/rendered

@@ -1,5 +1,7 @@
 # OpenGrad Phase 0 Bootstrap Record
 
+Historical phase report. This record describes the initial bootstrap checkpoint; current pre-GPU completion is recorded in `ROADMAP.md` and `reports/data-normalization-v1.md`.
+
 Phase 0 established the repository and research infrastructure. Phase 0.5 added CPU-only pre-experiment validation; no model inference, training, checkpoint modification, or full dataset materialization has occurred.
 
 ## Deliverables

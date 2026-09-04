@@ -16,7 +16,8 @@ def test_dataset_metadata_is_field_level_and_clean_exclusion_is_preserved():
     assert by_id["xlam-function-calling-60k"]["sample_count"]["published"] == 60000
     assert by_id["xlam-function-calling-60k"]["license"]["verified"] is True
     assert by_id["xlam-function-calling-60k"]["processed_dataset_hash"]["status"] == (
-        "pending_dataset_preparation"
+        "FULL_DATA_VALIDATED"
     )
+    assert by_id["xlam-function-calling-60k"]["retained_after_filtering"]["value"] == 59370
     assert by_id["apigen-mt-5k"]["contamination_status"] == "EXCLUDED_FROM_CLEAN_DEFAULT"
     assert "clean_default" in by_id["apigen-mt-5k"]["forbidden_splits"]

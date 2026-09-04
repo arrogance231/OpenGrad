@@ -1,0 +1,1 @@
+{"id":"xlam-fixture-1","query":"Weather in Manila?","tools":"[{\"name\":\"get_weather\",\"description\":\"Get weather\",\"parameters\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"]}}]","answers":"[{\"name\":\"get_weather\",\"arguments\":{\"city\":\"Manila\"}}]"}

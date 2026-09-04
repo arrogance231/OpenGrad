@@ -72,6 +72,24 @@ def validate(root: Path) -> list[str]:
             errors.append("experiments.schema.json: missing $schema")
     except (OSError, TypeError, ValueError) as exc:
         errors.append(f"experiments.schema.json: {exc}")
+    for name in (
+        "evaluation_manifest.schema.json",
+        "gpu_preflight.schema.json",
+        "runtime_components.schema.json",
+    ):
+        try:
+            schema = json.loads((root / "registry" / name).read_text(encoding="utf-8"))
+            if schema.get("$schema") is None:
+                errors.append(f"{name}: missing $schema")
+        except (OSError, TypeError, ValueError) as exc:
+            errors.append(f"{name}: {exc}")
+    for name in ("training_recipes.yaml", "runtime_components.yaml"):
+        try:
+            value = load_yaml(root / "registry" / name)
+            if not isinstance(value, dict) or "schema_version" not in value:
+                errors.append(name + ": missing schema_version")
+        except (ImportError, OSError, TypeError, ValueError) as exc:
+            errors.append(f"{name}: {exc}")
     return errors
 
 

@@ -4,15 +4,19 @@ research_question: Does behavioral and residual-driven dataset composition impro
 base_experiment: tool_calling/qwen35_2b/baseline
 interventions:
   - id: m0
+    name: source-oriented control
     mixture_config: configs/data/tool_calling/source_baseline_v1.yaml
     mixture_class: source_oriented
   - id: m1
+    name: behavior-balanced control
     mixture_config: configs/data/tool_calling/balanced_policy_v1.yaml
     mixture_class: behavior_balanced
   - id: m2
+    name: residual-driven hypothesis
     mixture_config: configs/data/tool_calling/residual_policy_v1.yaml
     mixture_class: residual_driven
     requires: baseline_residual_profile
+    status: UNRESOLVED_UNTIL_BASELINE
 controls:
   identical_base_checkpoint: true
   matched_training_tokens: where_feasible
@@ -20,3 +24,7 @@ controls:
   evaluation_suite: same_held_out_suite_for_all
   sampling_settings: record_per_run
 results: NOT_AVAILABLE
+semantics:
+  m0: Fixed source-oriented mixture control; historical proportions are hypotheses only.
+  m1: Fixed behavior-balanced mixture control; weights are hypotheses until materialization audit.
+  m2: Baseline-dependent residual hypothesis; no weights or claims are valid before baseline evidence.

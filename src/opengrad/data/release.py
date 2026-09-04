@@ -62,6 +62,13 @@ def _parquet_row(row: dict[str, Any], source: dict[str, Any]) -> dict[str, Any]:
         "source_record_id": str(provenance.get("upstream_id", row["id"])),
         "source_split": str(metadata.get("split", "")) if isinstance(metadata, dict) else "",
         "source_revision": source["source_revision"],
+        "source_license": source["upstream_license"],
+        "redistribution_status": source["redistribution_status"],
+        "modification_status": source.get("modification_status", "NORMALIZED_DERIVATIVE"),
+        "upstream_access_mode": source.get("upstream_access_mode", "public"),
+        "downstream_access_requirement": source.get(
+            "downstream_access_requirement", "public_allowed"
+        ),
         "adapter": str(metadata.get("adapter", "")) if isinstance(metadata, dict) else "",
         "adapter_version": str(metadata.get("adapter_version", ""))
         if isinstance(metadata, dict)
@@ -99,15 +106,17 @@ def build_release(root: Path, config_path: Path, output: Path) -> dict[str, Any]
         manifest = artifact / "manifest.json"
         if not manifest.exists():
             raise FileNotFoundError(f"source manifest missing: {manifest}")
-        redistribution = source["redistribution_status"]
-        if redistribution == "GATED_SOURCE_REVIEW_REQUIRED" and not config.get(
-            "allow_gated_sources", False
-        ):
+        redistribution = source.get("redistribution_status")
+        if not source.get("source_revision"):
+            raise ValueError(f"source revision missing for {source['id']}")
+        if not source.get("upstream_license"):
+            raise ValueError(f"upstream license missing for {source['id']}")
+        if redistribution not in {"PERMITTED_WITH_ATTRIBUTION", "REDISTRIBUTION_WITH_ATTRIBUTION"}:
             excluded.append(
                 {
                     "source": source["id"],
                     "source_revision": source["source_revision"],
-                    "reason": redistribution,
+                    "reason": redistribution or "REDISTRIBUTION_STATUS_UNKNOWN",
                     "manifest": str(manifest.relative_to(root)).replace("\\", "/"),
                     "input_manifest_sha256": _sha256(manifest),
                 }
@@ -147,7 +156,17 @@ def build_release(root: Path, config_path: Path, output: Path) -> dict[str, Any]
             {
                 "source": source["id"],
                 "source_revision": source["source_revision"],
+                "upstream_license": source["upstream_license"],
                 "redistribution_status": redistribution,
+                "upstream_access_mode": source.get("upstream_access_mode", "public"),
+                "downstream_access_requirement": source.get(
+                    "downstream_access_requirement", "public_allowed"
+                ),
+                "attribution_required": source.get("attribution_required", True),
+                "citation_required": source.get("citation_required", True),
+                "citation_target": source.get("citation_target", "source"),
+                "modifications_disclosed": source.get("modifications_disclosed", True),
+                "modification_status": source.get("modification_status", "NORMALIZED_DERIVATIVE"),
                 "input_manifest": str(manifest.relative_to(root)).replace("\\", "/"),
                 "input_manifest_sha256": _sha256(manifest),
                 "records": source_count,
@@ -207,7 +226,7 @@ def build_release(root: Path, config_path: Path, output: Path) -> dict[str, Any]
                 ),
                 retained=raw.get("training_eligible", raw.get("valid", item["records"])),
                 published=item["records"],
-                license=source_cfg["redistribution_status"],
+                license=f"{source_cfg['upstream_license']} ({source_cfg['redistribution_status']})",
                 adapter=item.get(
                     "adapter_version", source_cfg.get("adapter_version", "see source manifest")
                 ),

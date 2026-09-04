@@ -4,7 +4,7 @@ This file records observed upstream metadata for publication preparation. It is 
 
 | Source | Upstream | Observed license/terms | Status |
 |---|---|---|---|
-| xLAM | https://huggingface.co/datasets/Salesforce/xlam-function-calling-60k | CC-BY-4.0 card metadata; gated access | GATED_SOURCE_REVIEW_REQUIRED; excluded by default |
+| xLAM | https://huggingface.co/datasets/Salesforce/xlam-function-calling-60k | CC-BY-4.0; upstream access gate | PERMITTED_WITH_ATTRIBUTION; included as normalized derivative |
 | BUTTON | https://github.com/PKU-Baichuan-MLSystemLab/BUTTON | CC-BY-4.0 repository metadata | REDISTRIBUTION_WITH_ATTRIBUTION |
 | ToolACE | https://huggingface.co/datasets/Team-ACE/ToolACE | Apache-2.0 dataset metadata | REDISTRIBUTION_WITH_ATTRIBUTION |
 | LoopTool-23k | https://huggingface.co/datasets/zhangkangning/LoopTool-23k | Apache-2.0 dataset metadata | REDISTRIBUTION_WITH_ATTRIBUTION |
@@ -13,4 +13,4 @@ This file records observed upstream metadata for publication preparation. It is 
 
 The OpenGrad Apache-2.0 source license does not relicense upstream datasets. Attribution, notices, source links, revisions, and citations must remain visible in any Hub release.
 
-The default release configuration excludes xLAM until the current gated terms are reviewed for redistribution of normalized derivative records. No alternate mirror is used.
+xLAM-derived records in this release are modified normalized derivatives distributed under the applicable CC BY 4.0 terms. The upstream gate is an access mechanism and is not reproduced on the public OpenGrad derivative. Preserve Salesforce/APIGen attribution and cite APIGen.

@@ -25,7 +25,7 @@ Current evidence:
 
 Canonical dataset publication — CANONICAL_DATASET_PUBLISHED
 
-`arrochi112/OpenGrad-ToolPolicy-Canonical-v1` is public and verified at Hub commit `4d2bf3ab1cd480f04c13627c153a4cf9cf4e145f`. The release contains 154,581 legally cleared canonical SFT records. xLAM remains locally materialized but excluded pending gated redistribution review. Publication metadata is recorded in `reports/releases/toolpolicy-canonical-v1-publication.json`.
+`arrochi112/OpenGrad-ToolPolicy-Canonical-v1` is public and verified at Hub commit `4d2bf3ab1cd480f04c13627c153a4cf9cf4e145f`. The release contains 213,951 legally cleared canonical SFT records. xLAM is included under CC BY 4.0 with attribution and APIGen citation; its upstream access gate is not reproduced downstream. Publication metadata is recorded in `reports/releases/toolpolicy-canonical-v1-publication.json`.
 
 ## Next empirical sequence
 

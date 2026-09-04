@@ -18,10 +18,23 @@ def test_release_row_preserves_source_lineage():
             "behavior": {"decision": "ANSWER", "confidence": "known", "capabilities": []},
         },
     }
-    result = _parquet_row(row, {"id": "fixture", "source_revision": "rev"})
+    result = _parquet_row(
+        row,
+        {
+            "id": "fixture",
+            "source_revision": "rev",
+            "upstream_license": "CC-BY-4.0",
+            "redistribution_status": "PERMITTED_WITH_ATTRIBUTION",
+            "upstream_access_mode": "gated",
+        },
+    )
     assert result["opengrad_id"] == "og-1"
     assert result["source_record_id"] == "source-1"
     assert result["source_revision"] == "rev"
+    assert result["source_license"] == "CC-BY-4.0"
+    assert result["redistribution_status"] == "PERMITTED_WITH_ATTRIBUTION"
+    assert result["upstream_access_mode"] == "gated"
+    assert result["downstream_access_requirement"] == "public_allowed"
     assert result["behavior_decision"] == "ANSWER"
 
 

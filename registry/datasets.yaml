@@ -1,5 +1,5 @@
 schema_version: 1
-status: ACCESSIBLE_CORPORA_MATERIALIZED_BUTTON_PENDING
+status: ACCESSIBLE_CORPORA_MATERIALIZED
 datasets:
 - id: xlam-function-calling-60k
   display_name: xLAM / APIGen Function Calling 60k
@@ -13,7 +13,13 @@ datasets:
     value: CC-BY-4.0
     verified: true
     source: https://huggingface.co/datasets/Salesforce/xlam-function-calling-60k
-  redistribution: NOT_ASSESSED
+  redistribution: PERMITTED_WITH_ATTRIBUTION
+  upstream_access_mode: gated
+  downstream_access_requirement: public_allowed
+  attribution_required: true
+  citation_required: true
+  citation_target: APIGen
+  modifications_disclosed: true
   original_sample_count: null
   retained_sample_count: null
   preprocessing_version: null

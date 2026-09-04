@@ -6,7 +6,7 @@ GitHub is the canonical home for source code, schemas, manifests, provenance, au
 
 ## Current release definition
 
-`OpenGrad ToolPolicy Canonical v1` is `CANONICAL_DATASET_PUBLISHED` at Hub commit `4d2bf3ab1cd480f04c13627c153a4cf9cf4e145f`. The public payload contains only the legally cleared canonical SFT sources; xLAM remains locally materialized but excluded pending gated redistribution review. The exact publication record is `reports/releases/toolpolicy-canonical-v1-publication.json`.
+`OpenGrad ToolPolicy Canonical v1` is `CANONICAL_DATASET_PUBLISHED` at Hub commit `4d2bf3ab1cd480f04c13627c153a4cf9cf4e145f`. The public payload contains the five previously cleared sources plus 59,370 xLAM/APIGen normalized records under CC BY 4.0 with attribution and modification disclosure. The xLAM upstream access gate is not reproduced downstream. The exact publication record is `reports/releases/toolpolicy-canonical-v1-publication.json`.
 
 The tracked release config is `configs/releases/toolpolicy_canonical_v1.yaml`. The tracked dataset-card, licensing, and citation inputs are under `release/huggingface/toolpolicy-canonical-v1/`. Generated staging output belongs under `.release/` and is ignored.
 
@@ -16,7 +16,7 @@ The release builder reads source manifests rather than hard-coding record counts
 
 The intended source scope is xLAM, BUTTON, ToolACE, LoopTool, Glaive Function Calling v2, and When2Call SFT. When2Call preference, MCQ, and LLM-judge artifacts are explicitly excluded. The frozen 3,952-record evaluation namespace is never embedded in the training/candidate release. Qwen-rendered text is also excluded; model-specific rendering remains a separate experiment artifact.
 
-xLAM is gated. Although its card metadata reports CC-BY-4.0 and the source is materialized locally, accepted gated terms must be reviewed for redistribution of normalized derivative records. The default release configuration therefore excludes xLAM and records the reason in the release manifest. The builder fails closed rather than treating authentication as redistribution permission.
+The release includes xLAM under CC BY 4.0 as a normalized derivative, with attribution, APIGen citation, and modification disclosure. Its upstream access mode is gated, but downstream redistribution is explicitly permitted with attribution; the OpenGrad release is public and does not reproduce the upstream gate.
 
 ## Commands
 

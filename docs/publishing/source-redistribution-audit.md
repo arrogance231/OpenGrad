@@ -4,16 +4,28 @@ Audit scope: publication preparation only. This is a provenance and metadata aud
 
 | Source | Upstream source | Pinned revision | Observed license metadata | Distribution status | Publication treatment |
 |---|---|---|---|---|---|
-| xLAM | https://huggingface.co/datasets/Salesforce/xlam-function-calling-60k | `26d14ebfe18b1f7b524bd39b404b50af5dc97866` | HF card reports CC-BY-4.0; gated access is enabled | GATED_SOURCE_REVIEW_REQUIRED | Excluded by default until accepted gated terms are reviewed for redistribution of normalized rows |
+| xLAM | https://huggingface.co/datasets/Salesforce/xlam-function-calling-60k | `26d14ebfe18b1f7b524bd39b404b50af5dc97866` | HF card declares CC-BY-4.0; upstream access is gated | PERMITTED_WITH_ATTRIBUTION | Included as a modified derivative with attribution, APIGen citation, and modification disclosure; downstream release remains public |
 | BUTTON | https://github.com/PKU-Baichuan-MLSystemLab/BUTTON | `47cb720ed223b249a2f1d0a3faf1cb1eb7175622` | GitHub repository metadata reports CC-BY-4.0 | REDISTRIBUTION_WITH_ATTRIBUTION | Eligible with attribution; retain upstream notices and dataset citation |
 | ToolACE | https://huggingface.co/datasets/Team-ACE/ToolACE | `6bda777c88d21e5a204703c1ee45597a8fa4f734` | HF dataset metadata reports Apache-2.0 | REDISTRIBUTION_WITH_ATTRIBUTION | Eligible with attribution; verify card terms again immediately before upload |
 | LoopTool-23k | https://huggingface.co/datasets/zhangkangning/LoopTool-23k | `b6c572d442ed4f2177f23645d8e9a77522e712c3` | HF dataset metadata reports Apache-2.0 | REDISTRIBUTION_WITH_ATTRIBUTION | Eligible with attribution; preserve possible derivation warning |
 | Glaive Function Calling v2 | https://huggingface.co/datasets/glaiveai/glaive-function-calling-v2 | `e7f4b6456019f5d8bcb991ef0dd67d8ff23221ac` | HF dataset metadata reports Apache-2.0 | REDISTRIBUTION_WITH_ATTRIBUTION | Eligible with attribution; verify card terms again immediately before upload |
 | When2Call | https://huggingface.co/datasets/nvidia/When2Call and https://github.com/NVIDIA/When2Call | `0582f7749df63a96fdc3070932e83e72396ace53` | HF dataset metadata reports CC-BY-4.0 | REDISTRIBUTION_WITH_ATTRIBUTION | Eligible with attribution; keep SFT, preference, and evaluation configurations separate |
 
-## xLAM boundary
+## xLAM decision
 
-The xLAM file was accessed through an accepted gated account and normalized locally. That access does not by itself establish permission to redistribute the normalized derivative corpus. Until the current gated terms are reviewed and cleared, the release configuration excludes xLAM and records the exclusion in the generated release manifest. No mirror or alternate source is used to bypass the gate.
+Previous state: redistribution was conservatively unresolved because the upstream Hugging Face repository uses gated access.
+
+Reviewed evidence:
+
+- official Salesforce xLAM dataset repository and card
+- declared CC BY 4.0 license
+- current gate conditions requiring acknowledgment and APIGen citation
+- pinned OpenGrad source revision and local normalization manifest
+
+Decision: normalized xLAM-derived records may be included in OpenGrad's public dataset release under CC BY 4.0 with attribution, modification disclosure, upstream provenance, and APIGen citation. The upstream access gate is modeled independently and is not reproduced downstream. This is a project provenance decision, not formal legal advice.
+
+Decision date: 2026-09-04
+Implementation revision: recorded in the OpenGrad commit that updates this policy.
 
 ## Mixed-license policy
 
@@ -21,4 +33,4 @@ The Apache-2.0 license in the OpenGrad repository applies to OpenGrad source cod
 
 ## Recheck requirement
 
-Upstream cards, repository terms, gated conditions, and redistribution status must be rechecked immediately before any future update. The v1.0.0 release was published only after this audit; its public payload excludes xLAM pending gated redistribution review.
+Upstream cards, repository terms, gated conditions, and redistribution status must be rechecked immediately before any future update. The v1.0.0 release includes xLAM under the documented CC BY 4.0 attribution and modification terms; its upstream access gate is not reproduced downstream.

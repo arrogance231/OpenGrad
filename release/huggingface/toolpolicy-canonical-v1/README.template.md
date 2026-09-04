@@ -18,6 +18,10 @@ configs:
 
 OpenGrad ToolPolicy Canonical v1 is a provenance-preserving, model-independent normalization of several public tool-use and function-calling datasets. It is released as a pre-training candidate corpus for controlled research into tool-use policy in small open-weight language models. See [OpenGrad](https://github.com/arrogance231/OpenGrad) for the production methodology and reproducibility artifacts.
 
+## xLAM / APIGen provenance
+
+This release includes 59,370 normalized records derived from `Salesforce/xlam-function-calling-60k` at revision `26d14ebfe18b1f7b524bd39b404b50af5dc97866`. The upstream dataset declares CC BY 4.0. Redistribution of these normalized xLAM-derived records is permitted under CC BY 4.0, subject to attribution and the applicable license terms. OpenGrad modifies the records through canonical schema conversion, tool-definition and message normalization, structural validation, invalid-record filtering, deduplication, and metadata augmentation where represented by the canonical artifact. These are modified derivatives; the original Salesforce/APIGen authors retain attribution, and users should cite APIGen. OpenGrad is not affiliated with or endorsed by Salesforce or the APIGen authors. The upstream repository uses a Hugging Face access gate; that upstream access mode is distinct from downstream redistribution permission, and this public OpenGrad dataset is not gated solely for that reason. Any upstream ethical-use statements remain source context and do not replace the applicable license terms.
+
 ## What this release is not
 
 It is not a final recommended training mixture, a Qwen3.5 training dataset, M0, M1, M2, or a post-training result. No claim is made that training on all records or their natural proportions is optimal. The exact Qwen3.5-2B training mixture will be frozen separately after baseline evaluation and experiment selection.

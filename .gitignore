@@ -26,3 +26,7 @@ results/raw/
 *.pth
 *.pt
 *.ckpt
+
+# Personal application materials — local only, never publish
+docs/research/compute-proposal.md
+docs/research/runpod-application-draft.md

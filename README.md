@@ -47,7 +47,7 @@ A recipe is not better merely because one metric increases. OpenGrad evaluates w
 
 ## From deployment problems to research questions
 
-OpenGrad did not choose tool calling and inference efficiency arbitrarily. Its initial questions were motivated by practical deployment findings from [OpenWeights](https://github.com/alpharomercoma/openweights), an independent open-source Android project developed by `alpharomercoma`. OpenWeights runs open-weight Hugging Face models locally on constrained consumer hardware, primarily through llama.cpp/GGUF, with an additional ExecuTorch runtime.
+OpenGrad did not choose tool calling and inference efficiency arbitrarily. Its initial questions were motivated by practical deployment findings from [OpenWeights](https://github.com/alpharomercoma/openweights), an independent open-source Android project developed by `alpharomercoma`. OpenWeights runs open-weight Hugging Face models locally on constrained consumer hardware, primarily through llama.cpp/GGUF, with an additional ExecuTorch runtime. OpenWeights is developed by Alpha Romer Coma, founder of [Experimental Machines](https://experimentalmachines.org/), an independent research group ("Test what others assume"); OpenGrad is maintained by founding member Arjhine Ty as a direct supporting project to that research program.
 
 OpenWeights exposed two problems that conventional model capability claims can hide:
 
@@ -65,7 +65,7 @@ flowchart LR
     OW2 --> OBS
 ```
 
-This is the intended feedback loop. The repositories are independently maintained: OpenGrad does not own OpenWeights, and OpenWeights is not an OpenGrad subproject.
+This is the intended feedback loop. The repositories are independently maintained: OpenGrad does not own OpenWeights, and OpenWeights is not an OpenGrad subproject. Both are connected through Experimental Machines, within which OpenGrad directly supports OpenWeights by answering the model-level questions its deployment record exposed.
 
 ## Research questions
 
@@ -393,10 +393,11 @@ Start with [CONTRIBUTING.md](CONTRIBUTING.md), the [reproduction PR guide](docs/
 
 ## Related projects
 
+- [Experimental Machines](https://experimentalmachines.org/) — the independent research group behind this program ("Independent research across intelligence, compute, and data"; "Test what others assume"). OpenGrad is a direct supporting project to the group's founder, whose deployment program is OpenWeights.
 - [OpenWeights](https://github.com/alpharomercoma/openweights) — downstream execution environment for compatible GGUF/llama.cpp and ExecuTorch artifacts and practical device-side measurements. OpenGrad defines experiments, evaluation, and evidence; OpenWeights runs compatible artifacts.
-- [OpenPapers](https://github.com/arrogance231/openpapers) — optional literature discovery and scholarly provenance support. Its findings are research inputs, not empirical OpenGrad results; see [the boundary documentation](docs/research/OPENPAPERS.md).
+- [OpenPapers](https://github.com/arrogance231/openpapers) — first-level research server for OpenGrad: just-in-time, provenance-preserving scholarly retrieval during active research instead of speculative bulk paper downloads (see [the boundary documentation](docs/research/OPENPAPERS.md)). Its findings are research inputs, not empirical OpenGrad results.
 
-OpenGrad's initial research questions were motivated in part by engineering and measurements from OpenWeights, developed by `alpharomercoma`. OpenWeights provides the constrained-device environment in which practical limits of small open-weight models became visible; it remains an independent project rather than an OpenGrad component.
+OpenGrad's initial research questions were motivated in part by engineering and measurements from OpenWeights, developed by `alpharomercoma`, founder of Experimental Machines. OpenWeights provides the constrained-device environment in which practical limits of small open-weight models became visible; it remains an independent project rather than an OpenGrad component.
 
 ## Roadmap
 

@@ -1,8 +1,8 @@
 # From deployment problems to research questions
 
-OpenGrad's initial research questions were motivated by practical deployment findings from [OpenWeights](https://github.com/alpharomercoma/openweights), an independent open-source Android application developed by `alpharomercoma`. OpenWeights runs open-weight Hugging Face models locally on constrained consumer hardware, primarily through llama.cpp/GGUF, with an additional ExecuTorch runtime.
+OpenGrad's initial research questions were motivated by practical deployment findings from [OpenWeights](https://github.com/alpharomercoma/openweights), an independent open-source Android application developed by `alpharomercoma`. OpenWeights runs open-weight Hugging Face models locally on constrained consumer hardware, primarily through llama.cpp/GGUF, with an additional ExecuTorch runtime. OpenWeights is developed by Alpha Romer Coma, founder of [Experimental Machines](https://experimentalmachines.org/), an independent research group ("Test what others assume"); OpenGrad is maintained by founding member Arjhine Ty as a direct supporting project to that research program.
 
-OpenWeights and OpenGrad are independently maintained projects. OpenGrad does not own OpenWeights, and OpenWeights is not an OpenGrad subproject. OpenWeights is a problem-discovery and downstream-validation environment; OpenGrad designs and records controlled model experiments.
+OpenWeights and OpenGrad are independently maintained repositories. OpenGrad does not own OpenWeights, and OpenWeights is not an OpenGrad subproject. OpenWeights is a problem-discovery and downstream-validation environment; OpenGrad designs and records controlled model experiments. The support relationship is programmatic, not administrative: OpenGrad exists to answer the model-level questions the OpenWeights deployment record exposed.
 
 ## What deployment exposed
 

@@ -1,8 +1,18 @@
 # OpenPapers workflow
 
-OpenPapers is the preferred optional research-reference interface for OpenGrad ([repository](https://github.com/arrogance231/openpapers)). At the inspected revision `5174637cacdd83dcfaf147c93b11f2633f944d7e` on `master`, it is an Apache-2.0 MCP server for scholarly retrieval, paper ingestion, and reproducible research workflows.
+OpenPapers is the first-level research server for OpenGrad ([repository](https://github.com/arrogance231/openpapers), release `v1.0.0`, commit `227fd2b76c86825d5faef39afe5195f6b0e362c0` on `master`). It is an Apache-2.0 MCP server for scholarly retrieval, paper ingestion, and reproducible research workflows; its release quality is gated by a five-level test program with recorded evidence ([test plan](https://github.com/arrogance231/openpapers/blob/master/docs/testing.md)).
 
 It provides replaceable adapters for arXiv, Crossref, OpenAlex, Semantic Scholar, GitHub, and Hugging Face; preserves DOI/arXiv/provider identities; discovers citations and implementations; reads bounded paper and repository content without executing it; and records evidence, uncertainty, conflicts, and provider failures. It can run over stdio or Streamable HTTP and uses local SQLite or PostgreSQL/pgvector storage.
+
+## First-level research server
+
+OpenGrad deliberately does not pre-download a fixed paper corpus before training begins: which papers matter only becomes clear once dataset materialization, training, and evaluation are underway. OpenPapers is the first stop for every literature need during active research:
+
+1. A question arises during research (a method claim, a training parameter, a benchmark definition).
+2. OpenPapers resolves it on demand through bounded retrieval with preserved source identity, locator, and uncertainty.
+3. The retrieved evidence is verified against the primary source before it enters OpenGrad records.
+
+This just-in-time strategy keeps the OpenGrad repository small, avoids speculative bulk downloads that may never be used, and still satisfies provenance rules: every claim traces to a primary source with an explicit locator and uncertainty status. Identifier-shaped queries (arXiv IDs, DOIs, and their URL forms) are resolved natively by OpenPapers' identifier probing, which was evaluated at 1.0 resolution rate on the recorded live run.
 
 ## Research workflow
 
